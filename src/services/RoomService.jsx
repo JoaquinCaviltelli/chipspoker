@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { db } from "../firebase";
+import { db } from "/src/firebase.js";
 import { doc, onSnapshot } from "firebase/firestore";
 
 const RoomContext = createContext();
