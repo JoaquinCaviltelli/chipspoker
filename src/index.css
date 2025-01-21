@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+    font-family: montserrat;
+}
+
+/* Animación para las cartas */
+.flip-card {
+    animation: flip 0.5s forwards;
+  }
+  
+  @keyframes flip {
+    0% {
+      transform: rotateY(0);
+    }
+    100% {
+      transform: rotateY(180deg);
+    }
+  }
+  
+  .card-container {
+    perspective: 1000px; /* Para dar un efecto 3D */
+  }
+  
+  .card-container img {
+    backface-visibility: hidden; /* Oculta el reverso durante la rotación */
+    transform-style: preserve-3d; /* Necesario para la animación 3D */
+  }
+  
+  .card {
+    /* Esto ajusta el tamaño de las cartas al ancho de la pantalla, manteniendo la relación de aspecto */
+    width: 30vw; /* Ajusta este valor según lo que consideres apropiado */
+    aspect-ratio: 2 / 3; /* Esto asegura que el alto sea el doble que el ancho */
+    object-fit: cover; /* Hace que la imagen cubra completamente el área sin distorsionarse */
+  }
+  
