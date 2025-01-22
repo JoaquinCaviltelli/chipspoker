@@ -207,8 +207,8 @@ const GameRoom = () => {
 
   return (
     <div className="fixed inset-0 flex flex-col justify-center">
-      <div className="flex justify-between gap-3 mb-8">
-        <div className="flex gap-3">
+      <div className="flex justify-between gap-3 items-center">
+        <div className="flex gap-3 m-6">
           <h1 className="text-3xl text-gray-600 font-semibold capitalize">
             {userData?.name}
           </h1>
@@ -218,7 +218,7 @@ const GameRoom = () => {
         </div>
         <button
           onClick={leaveRoom}
-          className="bg-red-800 text-white p-2 rounded-md mb-8 flex"
+          className="bg-red-800 text-white p-2 px-3 rounded-l flex items-center"
         >
           <span className="material-symbols-outlined rotate-180 font-medium">logout</span>
         </button>

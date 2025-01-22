@@ -16,7 +16,7 @@ const Ficha = ({ denominacion, color1, color2 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 100 100"
-    className="w-14 h-14 shadow-xl rounded-full"
+    className="w-16 h-16 shadow-xl rounded-full"
     fill="none"
   >
     <defs>
@@ -107,11 +107,7 @@ const BetModal = ({
     }, {});
 
     return (
-      <div className="flex justify-center relative gap-10 mb-4 w-screen h-full p-6">
-        <h2 className="text-3xl text-gray-700 absolute bottom-3 right-10 font-bold text-center">
-          {currentBet}
-          {/* {simulatedBalance} */}
-        </h2>
+      <div className="flex justify-center relative gap-10 mb-4 h-full p-6">
         {Object.keys(fichesGrouped).map((value) => (
           <div key={value} className="relative -translate-x-8">
             {fichesGrouped[value].map((_, index) => (
@@ -132,6 +128,28 @@ const BetModal = ({
             ))}
           </div>
         ))}
+        <button
+          onClick={handleResetBet}
+          className={`bg-gray-700 text-white px-4 py-2 rounded absolute bottom-2 left-2 flex`}
+        >
+          <span className="material-symbols-outlined font-semibold text-xl">
+            backspace
+          </span>
+        </button>
+        <div
+          onClick={handleConfirmBet}
+          className="absolute bottom-2 right-2 flex gap-3 justify-center items-center bg-[#5B7661] rounded px-4 py-2 cursor-pointer"
+        >
+          <h2 className="text-xl text-white  font-bold text-center">
+            {currentBet}
+            {/* {simulatedBalance} */}
+          </h2>
+          <button className={`text-white rounded-md flex`}>
+            <span className="material-symbols-outlined font-semibold ">
+              publish
+            </span>
+          </button>
+        </div>
       </div>
     );
   };
@@ -158,82 +176,70 @@ const BetModal = ({
   return (
     <div className="w-full flex flex-col justify-between items-center h-full">
       <div className="flex w-full h-full mb-10 gap-2 flex-row-reverse">
+        <Slide />
 
-     
-      <Slide/>
+        {!currentBet ? (
+          // si hace doble click o doble touch active la funcion de pasar
 
-      {!currentBet ? (
-        // si hace doble click o doble touch active la funcion de pasar
-
-        <>
-          {currentTurn === user && round !== 4 ? (
-            <div
-              onDoubleClick={handlePass} // Para escritorio
-              onTouchEnd={handleTouch} // Para dispositivos móviles
-              className="bg-green-200 h-full w-full mb-4 flex justify-center items-center flex-col cursor-pointer select-none"
-            >
-              <span className="material-symbols-outlined text-gray-700 text-5xl">
-                touch_double
-              </span>
-              <span className="text-gray-700 font-medium">Check</span>
-            </div>
-          ) : (
-            <div className="bg-gray-200 h-full w-full mb-4 flex justify-center items-center ">
-              <span className="material-symbols-outlined text-gray-700 text-5xl">
-                hourglass_top
-              </span>
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="bg-green-200 h-full w-full mb-4 select-none">
-          {/* Área donde se acumulan las fichas seleccionadas */}
-          {renderSelectedFiches()}
-        </div>
-      )}
- </div>
+          <>
+            {currentTurn === user && round !== 4 ? (
+              <div
+                onDoubleClick={handlePass} // Para escritorio
+                onTouchEnd={handleTouch} // Para dispositivos móviles
+                className="bg-green-200 h-full w-full mb-4 flex justify-center items-center flex-col cursor-pointer select-none"
+              >
+                <span className="material-symbols-outlined text-gray-700 text-5xl">
+                  touch_double
+                </span>
+                <span className="text-gray-700 font-medium">Check</span>
+              </div>
+            ) : (
+              <div className="bg-gray-200 h-full w-full mb-4 flex justify-center items-center ">
+                <span className="material-symbols-outlined text-gray-700 text-5xl">
+                  hourglass_top
+                </span>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="bg-green-200 h-full w-full mb-4 select-none">
+            {/* Área donde se acumulan las fichas seleccionadas */}
+            {renderSelectedFiches()}
+          </div>
+        )}
+      </div>
 
       {/* Fichas de casino */}
-      <div className="flex flex-wrap justify-center gap-2 max-w-2xl m-auto mb-10">
-        {[10, 25, 50, 100, 500, 1000].map((valor) => (
-          <button
-            key={valor}
-            onClick={() => handleAddBet(valor)}
-            disabled={simulatedBalance < valor || currentTurn !== user} // Deshabilitar si no hay suficiente balance
-            className={`flex flex-col items-center justify-center ${
-              simulatedBalance < valor || currentTurn !== user ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
-            <Ficha
-              denominacion={valor}
-              color1={estiloFicha[valor].color1}
-              color2={estiloFicha[valor].color2}
-            />
-          </button>
+      <div className="flex flex-wrap justify-center gap-3 max-w-2xl m-auto mb-10">
+        {[
+          [10, 25, 50, 100], // Fichas para la primera fila (4 elementos)
+          [500, 1000], // Fichas para la segunda fila (2 elementos)
+        ].map((fila, index) => (
+          <div key={index} className="flex w-full justify-center gap-2">
+            {fila.map((valor) => (
+              <button
+                key={valor}
+                onClick={() => handleAddBet(valor)}
+                disabled={simulatedBalance < valor || currentTurn !== user} // Deshabilitar si no hay suficiente balance
+                className={`flex flex-col items-center justify-center ${
+                  simulatedBalance < valor || currentTurn !== user
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
+              >
+                <Ficha
+                  denominacion={valor}
+                  color1={estiloFicha[valor].color1}
+                  color2={estiloFicha[valor].color2}
+                />
+              </button>
+            ))}
+          </div>
         ))}
       </div>
 
       {/* Botones para resetear, confirmar y cerrar */}
-      <div className="flex gap-3 max-w-2xl">
-        <button
-        disabled={currentTurn !== user}
-          onClick={handleResetBet}
-          className={`bg-gray-500 text-white px-4 py-2 rounded-md ${
-          currentTurn !== user ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-        >
-          Resetear
-        </button>
-        <button
-        disabled={currentTurn !== user}
-          onClick={handleConfirmBet}
-          className={`bg-[#5B7661] text-white px-4 py-2 rounded-md ${
-            currentTurn !== user ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-        >
-          Confirmar Apuesta
-        </button>
-      </div>
+      <div className="flex gap-3 max-w-2xl"></div>
     </div>
   );
 };
