@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext"; // Accede al contexto
-import Slide from "/src/components/Slide.jsx";
+import Slide from "/src/components/slide.jsx";
 
 // Estilo de las fichas basado en el código que compartiste
 const estiloFicha = {
@@ -161,6 +161,7 @@ const BetModal = ({
 
      
       <Slide/>
+
       {!currentBet ? (
         // si hace doble click o doble touch active la funcion de pasar
 
