@@ -15,6 +15,11 @@ const GameRoom = () => {
   const [currentTurn, setCurrentTurn] = useState(null);
   const [currentBet, setCurrentBet] = useState(0);
 
+    // Verifica si el jugador está "folded"
+    const isPlayerFolded = players.some(
+      (player) => player.id === user.uid && player.status === "folded"
+    );
+
   const isPlayerTurn = () =>
     round !== 4 &&
     currentTurn === user.uid &&
@@ -206,7 +211,7 @@ const GameRoom = () => {
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col justify-center">
+    <div className={`fixed inset-0 flex flex-col justify-center`}>
       <div className="flex justify-between gap-3 items-center">
         <div className="flex gap-3 m-6">
           <h1 className="text-3xl text-gray-600 font-semibold capitalize">
@@ -225,9 +230,12 @@ const GameRoom = () => {
       </div>
 
       <BetModal
+      isPlayerFolded={isPlayerFolded}
+      players={players}
         round={round}
         user={user.uid}
         currentTurn={currentTurn}
+        fold={handleFold}
         pass={handlePass}
         onAddBet={handleAddBet}
         onResetBet={handleResetBet}

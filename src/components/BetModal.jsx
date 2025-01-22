@@ -57,11 +57,14 @@ const BetModal = ({
   user,
   currentTurn,
   handleBet,
+  fold,
   pass,
   onAddBet,
   onResetBet,
   onConfirmBet,
   currentBet,
+  players,
+  isPlayerFolded
 }) => {
   const { userData, updateBalance } = useContext(AuthContext); // Accede a userData y la función updateBalance
   const [selectedFiches, setSelectedFiches] = useState([]);
@@ -73,6 +76,7 @@ const BetModal = ({
   // Efecto para sincronizar el balance simulado con el balance real
   useEffect(() => {
     setSimulatedBalance(userData.balance); // Inicializa el balance simulado al balance real
+    
   }, [userData.balance]);
 
   // Función para manejar el doble toque en dispositivos móviles
@@ -173,10 +177,12 @@ const BetModal = ({
     onConfirmBet(); // Confirmar la apuesta
   };
 
+
+      
   return (
     <div className="w-full flex flex-col justify-between items-center h-full">
       <div className="flex w-full h-full mb-10 gap-2 flex-row-reverse">
-        <Slide />
+        <Slide fold={fold}/>
 
         {!currentBet ? (
           // si hace doble click o doble touch active la funcion de pasar
@@ -194,7 +200,9 @@ const BetModal = ({
                 <span className="text-gray-700 font-medium">Check</span>
               </div>
             ) : (
-              <div className="bg-gray-200 h-full w-full mb-4 flex justify-center items-center ">
+              <div className={`h-full w-full mb-4 flex justify-center items-center ${
+                isPlayerFolded ? "bg-red-500" : "bg-gray-200 "
+              }`}>
                 <span className="material-symbols-outlined text-gray-700 text-5xl">
                   hourglass_top
                 </span>

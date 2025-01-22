@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SliderButton = () => {
+const SliderButton = ({fold}) => {
   const [isActive, setIsActive] = useState(false);
   const [startY, setStartY] = useState(0);  // Mantener startY para el movimiento vertical
   const [isSliding, setIsSliding] = useState(false);
@@ -29,6 +29,7 @@ const SliderButton = () => {
   const handleTouchEnd = () => {
     setIsSliding(false);
     if (isActive) {
+      fold()
       console.log("folded");
     }
   };

@@ -84,7 +84,11 @@ const TableVirtual = () => {
 
   const getAction = (player) => {
     if (player.status === "passed") {
-      return "Paso";
+      if(player.betAmount){
+        return `${player.betAmount || 0}`
+      } else {
+        return "Paso"
+      }
     } else if (player.status === "bet") {
       return `${player.betAmount || 0}`;
     } else if (player.status === "folded") {
@@ -246,7 +250,7 @@ const TableVirtual = () => {
         {cards.map((card, index) => (
           <div
             key={index}
-            className={`card-container border border-gray-100  ${flipCardAnimation(
+            className={`card-container border border-gray-400 rounded-md  ${flipCardAnimation(
               card.isFlipped
             )}`}
           >
