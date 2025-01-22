@@ -15,7 +15,12 @@ const GameRoom = () => {
   const [currentTurn, setCurrentTurn] = useState(null);
   const [currentBet, setCurrentBet] = useState(0);
 
-  const isPlayerTurn = () => round !== 4 && currentTurn === user.uid && !players.find(player => player.id === user.uid && player.status === 'folded');
+  const isPlayerTurn = () =>
+    round !== 4 &&
+    currentTurn === user.uid &&
+    !players.find(
+      (player) => player.id === user.uid && player.status === "folded"
+    );
 
   useEffect(() => {
     if (loading || !user || !isUserInRoom(user.uid)) {
@@ -29,7 +34,9 @@ const GameRoom = () => {
         const roomDoc = await getDoc(roomRef);
         const roomData = roomDoc.data();
         if (roomData?.players) {
-          const sortedPlayers = Object.values(roomData.players).sort((a, b) => a.order - b.order);
+          const sortedPlayers = Object.values(roomData.players).sort(
+            (a, b) => a.order - b.order
+          );
           setPlayers(sortedPlayers);
         }
         setRound(roomData?.round || 0);
@@ -63,66 +70,64 @@ const GameRoom = () => {
     }
   };
 
-
-
   const handleFold = async () => {
     if (!isPlayerTurn()) return;
-  
+
     // Si el jugador decide no igualar la apuesta, se marca como folded
     await updatePlayerStatus("folded");
     const nextTurn = getNextTurn();
     await updateRoom({ currentTurn: nextTurn });
   };
 
-
   const handleBet = async (amount) => {
     if (!isPlayerTurn()) return;
-  
-    console.log(userData.balance)
+
+    console.log(userData.balance);
     // Obtener el betAmount actual del jugador
     const playerRef = doc(db, "rooms", "default-room");
     const playerDoc = await getDoc(playerRef);
-    const currentPlayerBetAmount = playerDoc.data()?.players[user.uid]?.betAmount || 0;
-  
+    const currentPlayerBetAmount =
+      playerDoc.data()?.players[user.uid]?.betAmount || 0;
+
     // Sumar el nuevo monto al betAmount existente
     const newBetAmount = currentPlayerBetAmount + amount;
-  
+
     // Verificar si el jugador tiene suficiente saldo
     const newBalance = userData.balance - amount;
     if (newBalance < 0) {
       alert("No tienes suficiente saldo para realizar esta apuesta.");
       return;
     }
-  
+
     // Actualizar el balance del jugador
     const userRef = doc(db, "users", user.uid);
     await updateDoc(userRef, { balance: newBalance });
-  
+
     // Actualizar el estado de la apuesta y el estado del jugador
     const updates = {
       [`players.${user.uid}.status`]: "bet",
       [`players.${user.uid}.balance`]: userData.balance,
       [`players.${user.uid}.betAmount`]: newBetAmount,
-      };
-  
+    };
+
     // Actualizar la sala con la nueva apuesta
     await updateRoom(updates);
-  
+
     // Sumar al pot global
     const roomRef = doc(db, "rooms", "default-room");
     const roomDoc = await getDoc(roomRef);
     const currentPot = roomDoc.data()?.pot || 0;
     const newPot = currentPot + amount;
-  
+
     // Actualizar el pot global en la sala
     await updateRoom({ pot: newPot });
-  
+
     // Mover al siguiente turno
     const nextTurn = getNextTurn();
     await updateRoom({ currentTurn: nextTurn });
   };
 
-  const handleAddBet = (amount) => setCurrentBet(prevBet => prevBet + amount); // Añade al total de la apuesta
+  const handleAddBet = (amount) => setCurrentBet((prevBet) => prevBet + amount); // Añade al total de la apuesta
   const handleResetBet = () => setCurrentBet(0); // Resetea la apuesta actual
 
   const handleConfirmBet = async () => {
@@ -130,9 +135,11 @@ const GameRoom = () => {
       try {
         await handleBet(currentBet);
         const updatedBalance = userData.balance - currentBet;
-        await updateDoc(doc(db, "users", user.uid), { balance: updatedBalance });
-        await updateRoom({ [`players.${user.uid}.balance`]: updatedBalance, });
-        
+        await updateDoc(doc(db, "users", user.uid), {
+          balance: updatedBalance,
+        });
+        await updateRoom({ [`players.${user.uid}.balance`]: updatedBalance });
+
         handleResetBet();
       } catch (error) {
         console.error("Error al confirmar la apuesta:", error);
@@ -141,15 +148,16 @@ const GameRoom = () => {
       alert("No tienes suficiente saldo para realizar esta apuesta.");
     }
   };
-  
 
   const getNextTurn = () => {
-    const activePlayers = players.filter(player => player.status !== "folded");
-    const currentIndex = activePlayers.findIndex(player => player.id === currentTurn);
+    const activePlayers = players.filter(
+      (player) => player.status !== "folded"
+    );
+    const currentIndex = activePlayers.findIndex(
+      (player) => player.id === currentTurn
+    );
     return activePlayers[(currentIndex + 1) % activePlayers.length]?.id;
   };
-
-
 
   useEffect(() => {
     const checkIfRoomIsEmpty = async () => {
@@ -169,8 +177,13 @@ const GameRoom = () => {
       await updateDoc(roomRef, { [`players.${user.uid}`]: deleteField() });
 
       const roomDoc = await getDoc(roomRef);
-      const sortedPlayers = Object.values(roomDoc.data()?.players || {}).sort((a, b) => a.order - b.order);
-      const updatedPlayers = sortedPlayers.map((player, index) => ({ ...player, order: index + 1 }));
+      const sortedPlayers = Object.values(roomDoc.data()?.players || {}).sort(
+        (a, b) => a.order - b.order
+      );
+      const updatedPlayers = sortedPlayers.map((player, index) => ({
+        ...player,
+        order: index + 1,
+      }));
 
       const playersUpdate = updatedPlayers.reduce((acc, player) => {
         acc[`players.${player.id}`] = { ...player };
@@ -184,8 +197,6 @@ const GameRoom = () => {
     }
   };
 
- 
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -194,18 +205,22 @@ const GameRoom = () => {
     );
   }
 
- 
-
   return (
-    <div className="m-6 max-w-md">
-      <div className="flex gap-3 mb-8">
-        <h1 className="text-3xl text-gray-600 font-semibold capitalize">{userData?.name}</h1>
-        <span className="text-xl text-gray-600 font-bold">{userData?.balance}</span>
+    <div className="fixed inset-0 flex flex-col justify-center">
+      <div className="flex justify-between gap-3 mb-8">
+        <div className="flex gap-3">
+          <h1 className="text-3xl text-gray-600 font-semibold capitalize">
+            {userData?.name}
+          </h1>
+          <span className="text-xl text-gray-600 font-bold">
+            {userData?.balance}
+          </span>
+        </div>
         <button
           onClick={leaveRoom}
-          className="bg-red-500 text-white px-4 py-2 rounded-md w-full mb-8"
+          className="bg-red-800 text-white p-2 rounded-md mb-8 flex"
         >
-          Salir de la sala
+          <span className="material-symbols-outlined rotate-180 font-medium">logout</span>
         </button>
       </div>
 
@@ -220,16 +235,22 @@ const GameRoom = () => {
         currentBet={currentBet}
       />
 
-      {currentTurn === user.uid && round !== 4 && (
+      {/* {currentTurn === user.uid && round !== 4 && (
         <div className="flex gap-3 mt-4">
-          <button onClick={handleFold} className="bg-red-500 text-white px-4 py-2 rounded-md">
+          <button
+            onClick={handleFold}
+            className="bg-red-500 text-white px-4 py-2 rounded-md"
+          >
             Foldear
           </button>
-          <button onClick={handlePass} className="bg-gray-500 w-full text-white px-4 py-2 rounded-md">
+          <button
+            onClick={handlePass}
+            className="bg-gray-500 w-full text-white px-4 py-2 rounded-md"
+          >
             Pasar
           </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

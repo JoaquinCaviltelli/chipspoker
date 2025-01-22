@@ -31,25 +31,24 @@ const SliderButton = () => {
     if (isActive) {
       console.log("folded");
     }
-    setIsActive(false);
   };
 
   return (
     <div
-      className={`w-12 h-64 bg-gray-300 rounded-lg transition-all relative overflow-hidden ${
-        isActive && 'bg-red-400'
+      className={`w-20 h-full bg-gray-200 transition-all relative overflow-hidden ${
+        isActive && 'bg-red-500'
       }`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       <button
-        className={`absolute left-1/2 transform -translate-x-1/2 p-3 text-white font-semibold rounded-md transition-all w-12 h-16 duration-300 ${
-          isActive ? 'bg-red-500' : 'bg-red-400'
+        className={`absolute left-1/2 transform -translate-x-1/2 p-3 text-white font-semibold rounded-md transition-all w-20 h-16 duration-300 ${
+          isActive ? 'bg-red-500' : 'bg-red-500'
         }`}
         style={{ top: isActive ? '0' : 'calc(100% - 64px)' }}  // El botón empieza en la parte inferior y se mueve hacia arriba
       >
-        Foldear
+        Fold
       </button>
     </div>
   );

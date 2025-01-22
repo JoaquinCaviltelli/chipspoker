@@ -287,7 +287,7 @@ const TableVirtual = () => {
                   {getAction(player)}
                 </span>
               </div>
-              <div className={`flex flex-col justify-center items-center bg-gray-700 text-white w-36 h-16 rounded-lg text-lg ${player.id === currentTurn ? "bg-[#5B7661]" : ""}`}>
+              <div className={`flex flex-col justify-center items-center  text-white w-36 h-16 rounded-lg text-lg ${player.id === currentTurn ? "bg-[#5B7661]" : "bg-gray-700"}`}>
                 <span
                  
                 >

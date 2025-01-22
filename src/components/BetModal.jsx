@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext"; // Accede al contexto
+import Slide from "/src/components/Slide.jsx";
 
 // Estilo de las fichas basado en el código que compartiste
 const estiloFicha = {
@@ -106,11 +107,11 @@ const BetModal = ({
     }, {});
 
     return (
-      <div className="flex justify-center relative gap-10 bg-green-200 mb-4 h-80 w-screen p-6">
-         <h2 className="text-3xl text-gray-700 absolute bottom-3 right-10 font-bold text-center">
-        {currentBet}
-         {/* {simulatedBalance} */}
-      </h2>
+      <div className="flex justify-center relative gap-10 mb-4 w-screen h-full p-6">
+        <h2 className="text-3xl text-gray-700 absolute bottom-3 right-10 font-bold text-center">
+          {currentBet}
+          {/* {simulatedBalance} */}
+        </h2>
         {Object.keys(fichesGrouped).map((value) => (
           <div key={value} className="relative -translate-x-8">
             {fichesGrouped[value].map((_, index) => (
@@ -148,49 +149,48 @@ const BetModal = ({
 
   const handleConfirmBet = () => {
     // Cuando se confirma la apuesta, actualizar el balance real
-    
+
     updateBalance(simulatedBalance); // Actualizar el balance real con el balance simulado
     setSelectedFiches([]); // Vaciar las fichas seleccionadas
     onConfirmBet(); // Confirmar la apuesta
   };
 
   return (
-    <div className="w-full fixed bottom-0 left-0 bg-white flex flex-col justify-between items-center border-t-2">
+    <div className="w-full flex flex-col justify-between items-center h-full">
+      <div className="flex w-full h-full mb-10 gap-2 flex-row-reverse">
+
      
+      <Slide/>
       {!currentBet ? (
         // si hace doble click o doble touch active la funcion de pasar
-        
-        <>
-{currentTurn === user && round !== 4 ? (
-        <div
-        onDoubleClick={handlePass} // Para escritorio
-        onTouchEnd={handleTouch} // Para dispositivos móviles
-        className="bg-green-200 h-80 w-full mb-4 flex justify-center items-center flex-col cursor-pointer select-none"
-        >
-           <span className="material-symbols-outlined text-gray-700 text-5xl">
-touch_double
-</span>
-<span className="text-gray-700 font-medium">Check</span>
-        </div>
-      ):
-      (
-        <div
-        className="bg-gray-200 h-80 w-full mb-4 flex justify-center items-center "
-        >
-          <span className="material-symbols-outlined text-gray-700 text-5xl">
-          hourglass_top
-</span>
 
-        </div>
-      )
-      }
-      </>
+        <>
+          {currentTurn === user && round !== 4 ? (
+            <div
+              onDoubleClick={handlePass} // Para escritorio
+              onTouchEnd={handleTouch} // Para dispositivos móviles
+              className="bg-green-200 h-full w-full mb-4 flex justify-center items-center flex-col cursor-pointer select-none"
+            >
+              <span className="material-symbols-outlined text-gray-700 text-5xl">
+                touch_double
+              </span>
+              <span className="text-gray-700 font-medium">Check</span>
+            </div>
+          ) : (
+            <div className="bg-gray-200 h-full w-full mb-4 flex justify-center items-center ">
+              <span className="material-symbols-outlined text-gray-700 text-5xl">
+                hourglass_top
+              </span>
+            </div>
+          )}
+        </>
       ) : (
-        <div>
+        <div className="bg-green-200 h-full w-full mb-4 select-none">
           {/* Área donde se acumulan las fichas seleccionadas */}
           {renderSelectedFiches()}
         </div>
       )}
+ </div>
 
       {/* Fichas de casino */}
       <div className="flex flex-wrap justify-center gap-2 max-w-2xl m-auto mb-10">
@@ -198,9 +198,9 @@ touch_double
           <button
             key={valor}
             onClick={() => handleAddBet(valor)}
-            disabled={simulatedBalance < valor} // Deshabilitar si no hay suficiente balance
+            disabled={simulatedBalance < valor || currentTurn !== user} // Deshabilitar si no hay suficiente balance
             className={`flex flex-col items-center justify-center ${
-              simulatedBalance < valor ? "opacity-50 cursor-not-allowed" : ""
+              simulatedBalance < valor || currentTurn !== user ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
             <Ficha
@@ -215,14 +215,20 @@ touch_double
       {/* Botones para resetear, confirmar y cerrar */}
       <div className="flex gap-3 max-w-2xl">
         <button
+        disabled={currentTurn !== user}
           onClick={handleResetBet}
-          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition duration-300"
+          className={`bg-gray-500 text-white px-4 py-2 rounded-md ${
+          currentTurn !== user ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
           Resetear
         </button>
         <button
+        disabled={currentTurn !== user}
           onClick={handleConfirmBet}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
+          className={`bg-[#5B7661] text-white px-4 py-2 rounded-md ${
+            currentTurn !== user ? "opacity-50 cursor-not-allowed" : ""
+            }`}
         >
           Confirmar Apuesta
         </button>
