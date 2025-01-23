@@ -131,7 +131,7 @@ const GameRoom = () => {
           >
           <span className="material-symbols-outlined rotate-180">logout</span>
         </button>
-        <div className="flex gap-3 m-6">
+        <div className="flex gap-2 my-6 mx-3">
           <h1 className="text-3xl text-gray-800 font-bold">
             {userData?.name}
           </h1>
