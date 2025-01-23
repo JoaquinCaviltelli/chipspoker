@@ -182,7 +182,9 @@ const BetModal = ({
   return (
     <div className="w-full flex flex-col justify-between items-center h-full">
       <div className="flex w-full h-full mb-10 gap-2 flex-row-reverse">
-        <Slide fold={fold}/>
+        <Slide fold={fold} isPlayerFolded={isPlayerFolded}
+          currentTurn={currentTurn} user={user}
+        />
 
         {!currentBet ? (
           // si hace doble click o doble touch active la funcion de pasar
@@ -194,16 +196,20 @@ const BetModal = ({
                 onTouchEnd={handleTouch} // Para dispositivos móviles
                 className="bg-green-200 h-full w-full mb-4 flex justify-center items-center flex-col cursor-pointer select-none"
               >
-                <span className="material-symbols-outlined text-gray-700 text-5xl">
+                <span className="material-symbols-outlined text-gray-800 text-5xl">
                   touch_double
                 </span>
-                <span className="text-gray-700 font-medium">Check</span>
+                <span className="text-gray-700 font-medium text-xl">Paso</span>
+                {/* <span className="text-gray-700 text-xs">(docle touch)</span> */}
+
               </div>
             ) : (
               <div className={`h-full w-full mb-4 flex justify-center items-center ${
                 isPlayerFolded ? "bg-red-500" : "bg-gray-200 "
               }`}>
-                <span className="material-symbols-outlined text-gray-700 text-5xl">
+                <span className={`material-symbols-outlined  text-5xl ${
+                isPlayerFolded ? "text-white" : "text-gray-500"
+              }`}>
                   hourglass_top
                 </span>
               </div>
