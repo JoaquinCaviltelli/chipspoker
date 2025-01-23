@@ -28,22 +28,22 @@ const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
   return (
     isModalOpen && (
       <div className="fixed inset-0 bg-white overflow-scroll z-10">
-        <div className="bg-white p-6 rounded-lg w-full max-w-xl">
+        <div className="bg-white p-6 rounded-lg w-full max-w-xl flex justify-between items-start h-full">
           {/* <h2 className=" font-bold mb-4">Manos de Póker</h2> */}
           <div className="space-y-2">
             {pokerHands.map((hand, index) => (
               <div key={index}>
-                <h3 className="text-xs font-semibold">{hand.name}</h3>
-                <div className="flex gap-2">
+                <h3 className="text-xs font-semibold mb-1">{hand.name}</h3>
+                <div className="flex gap-1">
                   {hand.cards.map((card, idx) => {
                     // Comprobar si la carta está resaltada
                     const isHighlighted = hand.highlighted.includes(idx);
                     return (
                       <div
                         key={idx}
-                        className={`w-9 h-12 bg-white border-2 ${isHighlighted ? 'border-red-800' : 'border-gray-400 opacity-70'} rounded-md flex justify-center items-center transition-all`}
+                        className={`w-8 h-10 bg-white border-2 ${isHighlighted ? 'border-gray-800 ' : 'border-gray-400 opacity-70'} rounded-md flex justify-center items-center transition-all`}
                       >
-                        <span className={`text-sm font-bold ${getCardColor(card)}`}>{card}</span>
+                        <span className={`text-xs font-bold ${getCardColor(card)}`}>{card}</span>
                       </div>
                     );
                   })}
@@ -53,9 +53,11 @@ const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
           </div>
           <button
             onClick={toggleModal}
-            className="bg-red-600 text-white p-2 rounded-lg mt-4 w-full"
+            className="p-2"
           >
-            Cerrar
+            <span className="material-symbols-outlined text-gray-800 font-bold">
+close
+</span>
           </button>
         </div>
       </div>

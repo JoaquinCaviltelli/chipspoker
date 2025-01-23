@@ -122,11 +122,13 @@ const GameRoom = () => {
 
   return (
     <div className="fixed inset-0 flex flex-col justify-center">
-      <div className="flex justify-start items-center">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+
         <button
           onClick={leaveRoom}
           className="bg-red-800 text-white p-2 px-3 rounded-r flex items-center"
-        >
+          >
           <span className="material-symbols-outlined rotate-180">logout</span>
         </button>
         <div className="flex gap-3 m-6">
@@ -137,15 +139,18 @@ const GameRoom = () => {
             {userData?.balance}
           </span>
         </div>
-      </div>
-
+          </div>
       {/* Botón para abrir el modal con las manos de póker */}
       <button 
         onClick={toggleModal} 
-        className="bg-blue-600 text-white p-2 rounded-lg mt-4"
+        className="text-gray-800  p-3"
       >
-        Ver las manos de Póker
+        <span className="material-symbols-outlined text-4xl font-medium">
+playing_cards
+</span>
       </button>
+      </div>
+
 
       {/* Modal con las manos de póker */}
       <PokerHandsModal 
