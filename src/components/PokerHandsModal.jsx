@@ -54,7 +54,7 @@ const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
                             {number}
                           </span>
                           {/* Símbolo centrado en la carta */}
-                          <span className={`text-xl ${getCardColor(card)}`}>
+                          <span className={`text-lg ${getCardColor(card)}`}>
                             {suit}
                           </span>
                         </div>
