@@ -41,9 +41,9 @@ const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
                     return (
                       <div
                         key={idx}
-                        className={`w-9 h-12 bg-white border-2 ${isHighlighted ? 'border-gray-800 ' : 'border-gray-400 opacity-70'} rounded-md flex justify-center items-center transition-all`}
+                        className={`w-9 h-12 bg-white border ${isHighlighted ? ' border-gray-600' : 'border-gray-400 opacity-50'} rounded flex justify-center items-center transition-all`}
                       >
-                        <span className={`text-sm font-bold ${getCardColor(card)}`}>{card}</span>
+                        <span className={`text-sm font-semibold ${getCardColor(card)}`}>{card}</span>
                       </div>
                     );
                   })}
