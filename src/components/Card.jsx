@@ -1,5 +1,5 @@
 
-import card from '/src/assets/card.jpg';
+import card from '/src/assets/as.png';
 import backCard from '/src/assets/boca_abajo.jpg';
 
 export const Carta = ({ isFlipped }) => {
@@ -12,7 +12,7 @@ export const Carta = ({ isFlipped }) => {
         <div
           className={`absolute w-full h-full backface-hidden bg-cover bg-center rounded-md border border-gray-400`}
           style={{
-            backgroundImage: "url('/src/assets/as.png')", // Imagen cuando está boca arriba
+            backgroundImage: `url(${card})`,
           }}
         ></div>
 
@@ -20,7 +20,7 @@ export const Carta = ({ isFlipped }) => {
         <div
           className={`absolute w-full h-full rotate-y-180 backface-hidden bg-cover bg-center rounded-md`}
           style={{
-            backgroundImage: "url('/src/assets/boca_abajo.jpg')", // Imagen cuando está boca abajo
+            backgroundImage: `url(${backCard})`,
           }}
         ></div>
       </div>
