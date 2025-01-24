@@ -4,8 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useRoom } from "../services/RoomService";
 import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
-import card from '/src/assets/carta.jpg';
-import backCard from '/src/assets/boca_abajo.jpg';
+import { Carta } from '/src/components/Card.jsx';
 
 const TableVirtual = () => {
   const { user, userData, loading, admin } = useContext(AuthContext);
@@ -124,19 +123,23 @@ const TableVirtual = () => {
 
   const getCardsToShow = () => {
     const totalCards = 5;
-    const faceUpCards = round === 1 ? 3 : round === 2 ? 4 : round === 3 ? 5 : 0;
-
-    return [
+    const faceUpCards = round === 1 ? 2 : round === 2 ? 1 : round === 3 ? 0 : 5;
+  
+    const cards = [
       ...Array(faceUpCards).fill({
-        image: card,
+        
         isFlipped: true,
       }),
       ...Array(totalCards - faceUpCards).fill({
-        image: backCard,
+        
         isFlipped: false,
       }),
     ];
+  
+    // Invertir el orden de las cartas para que se muestren de izquierda a derecha
+    return cards.reverse();
   };
+  
 
   const getAction = (player) => {
     switch (player.status) {
@@ -180,19 +183,13 @@ const TableVirtual = () => {
       </div>
 
       <div className="flex justify-center space-x-2 mt-8 mb-2">
-        {getCardsToShow().map((card, index) => (
-          <div
-            key={index}
-            className={`card-container ${card.isFlipped ? "flip-card" : ""}`}
-          >
-            <img
-              src={card.image}
-              alt={`card-${index}`}
-              className="card w-full rounded-md shadow-lg"
-            />
-          </div>
-        ))}
-      </div>
+  {getCardsToShow().map((card, index) => (
+    <div key={index} className="card-container">
+      <Carta isFlipped={card.isFlipped} />
+    </div>
+  ))}
+</div>
+
 
       <h2 className="text-xl text-gray-600 font-bold text-center">
         {["Preflop", "Flop", "Rivers", "Turn"][round] || ""}
