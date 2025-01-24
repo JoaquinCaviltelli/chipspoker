@@ -77,7 +77,7 @@ const getCardColor = (card) => {
 const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
   return (
     isModalOpen && (
-      <div className="fixed inset-0 bg-gray-100 overflow-scroll z-10">
+      <div className="fixed inset-0 bg-white overflow-scroll z-10">
         <div className="rounded-lg w-full max-w-xl flex justify-between items-start h-full">
           {/* <h2 className="font-bold mb-4">Manos de Póker</h2> */}
           <div className="space-y-2 p-6">

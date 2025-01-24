@@ -111,7 +111,7 @@ const BetModal = ({
     }, {});
 
     return (
-      <div className="flex justify-center relative gap-10 mb-4 h-full py-20 ">
+      <div className="flex justify-center relative gap-10 mb-4 h-full py-10 ">
         {Object.keys(fichesGrouped).map((value) => (
           <div key={value} className="relative -translate-x-6 scale-75">
             {fichesGrouped[value].map((_, index) => (
@@ -135,7 +135,7 @@ const BetModal = ({
         ))}
         <button
           onClick={handleResetBet}
-          className={`bg-white text-[#985858] px-4 py-2 rounded absolute bottom-2 left-2 flex`}
+          className={`bg-white text-[#5B7661] px-4 py-2 rounded absolute bottom-2 left-2 flex`}
         >
           <span className="material-symbols-outlined font-bold text-xl">
             backspace
