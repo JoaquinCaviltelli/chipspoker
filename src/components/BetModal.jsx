@@ -111,16 +111,17 @@ const BetModal = ({
     }, {});
 
     return (
-      <div className="flex justify-center relative gap-10 mb-4 h-full p-6 ">
+      <div className="flex justify-center relative gap-10 mb-4 h-full py-20 ">
         {Object.keys(fichesGrouped).map((value) => (
-          <div key={value} className="relative -translate-x-8">
+          <div key={value} className="relative -translate-x-6 scale-75">
             {fichesGrouped[value].map((_, index) => (
               <div
                 key={index}
                 className="absolute"
                 style={{
-                  top: `${index * 10}px`,
-                  transform: `rotate(${index * 5}deg)`,
+                  bottom: `${index * 10}px`,
+                  left: `${index * 2 }px`,
+                  transform: `rotate(${index * 2}deg)`,
                 }}
               >
                 <Ficha
@@ -134,21 +135,21 @@ const BetModal = ({
         ))}
         <button
           onClick={handleResetBet}
-          className={`bg-gray-700 text-white px-4 py-2 rounded absolute bottom-2 left-2 flex`}
+          className={`bg-white text-[#985858] px-4 py-2 rounded absolute bottom-2 left-2 flex`}
         >
-          <span className="material-symbols-outlined font-semibold text-xl">
+          <span className="material-symbols-outlined font-bold text-xl">
             backspace
           </span>
         </button>
         <div
           onClick={handleConfirmBet}
-          className="absolute bottom-2 right-2 flex gap-3 justify-center items-center bg-[#5B7661] rounded px-4 py-2 cursor-pointer"
+          className="absolute bottom-2 right-2 flex gap-3 justify-center items-center bg-white rounded px-4 py-2 cursor-pointer"
         >
-          <h2 className="text-xl text-white  font-bold text-center">
+          <h2 className="text-xl text-[#5B7661]  font-bold text-center">
             {currentBet}
             {/* {simulatedBalance} */}
           </h2>
-          <button className={`text-white rounded-md flex`}>
+          <button className={`text-[#5B7661] rounded-md flex`}>
             <span className="material-symbols-outlined font-semibold ">
               publish
             </span>
@@ -204,7 +205,7 @@ const BetModal = ({
 
               </div>
             ) : (
-              <div className={`h-full w-full mb-4 flex justify-center items-center ${
+              <div className={`h-full w-full mb-4 flex justify-center items-center rounded-md ${
                 isPlayerFolded ? "bg-degradado" : "bg-gray-200 "
               }`}>
                 <span className={`material-symbols-outlined  text-5xl ${
