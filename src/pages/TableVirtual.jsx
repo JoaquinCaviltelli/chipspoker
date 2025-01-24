@@ -4,6 +4,8 @@ import { AuthContext } from "../context/AuthContext";
 import { useRoom } from "../services/RoomService";
 import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
+import card from '/src/assets/carta.jpg';
+import backCard from '/src/assets/boca_abajo.jpg';
 
 const TableVirtual = () => {
   const { user, userData, loading, admin } = useContext(AuthContext);
@@ -126,11 +128,11 @@ const TableVirtual = () => {
 
     return [
       ...Array(faceUpCards).fill({
-        image: "/src/assets/carta.jpg",
+        image: card,
         isFlipped: true,
       }),
       ...Array(totalCards - faceUpCards).fill({
-        image: "/src/assets/boca_abajo.jpg",
+        image: backCard,
         isFlipped: false,
       }),
     ];

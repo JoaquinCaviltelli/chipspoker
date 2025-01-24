@@ -1,16 +1,66 @@
 import React from 'react';
 
 const pokerHands = [
-  { name: "Escalera Real", cards: ["A♠", "K♠", "Q♠", "J♠", "10♠"], highlighted: [0, 1, 2, 3, 4] },
-  { name: "Escalera de Color", cards: ["9♣", "8♣", "7♣", "6♣", "5♣"], highlighted: [0, 1, 2, 3, 4] },
-  { name: "Póker", cards: ["K♠", "K♦", "K♣", "K♥", "2♠"], highlighted: [0, 1, 2, 3] },
-  { name: "Full House", cards: ["3♠", "3♦", "3♣", "J♠", "J♦"], highlighted: [0, 1, 2, 3, 4] },
-  { name: "Color", cards: ["A♠", "10♠", "7♠", "5♠", "3♠"], highlighted: [0, 1, 2, 3, 4] },
-  { name: "Escalera", cards: ["5♣", "6♦", "7♠", "8♥", "9♠"], highlighted: [0, 1, 2, 3, 4] },
-  { name: "Trío", cards: ["4♠", "4♦", "4♣", "2♠", "7♥"], highlighted: [0, 1, 2] },
-  { name: "Doble Pareja", cards: ["9♠", "9♦", "6♠", "6♣", "2♠"], highlighted: [0, 1, 2, 3] },
-  { name: "Pareja", cards: ["8♠", "8♦", "K♠", "3♣", "5♥"], highlighted: [0, 1] },
-  { name: "Carta Alta", cards: ["K♠", "J♦", "7♠", "6♣", "2♠"], highlighted: [0] }
+  { 
+    name: "Escalera Real", 
+    cards: ["A♠", "K♠", "Q♠", "J♠", "10♠"], 
+    highlighted: [0, 1, 2, 3, 4],
+    description: "La mejor mano de póker. Compuesta por A, K, Q, J y 10 del mismo palo."
+  },
+  { 
+    name: "Escalera de Color", 
+    cards: ["9♣", "8♣", "7♣", "6♣", "5♣"], 
+    highlighted: [0, 1, 2, 3, 4],
+    description: "Cinco cartas consecutivas del mismo palo."
+  },
+  { 
+    name: "Póker", 
+    cards: ["K♠", "K♦", "K♣", "K♥", "2♠"], 
+    highlighted: [0, 1, 2, 3],
+    description: "Cuatro cartas del mismo valor, independientemente del palo."
+  },
+  { 
+    name: "Full House", 
+    cards: ["3♠", "3♦", "3♣", "J♠", "J♦"], 
+    highlighted: [0, 1, 2, 3, 4],
+    description: "Tres cartas de un valor y dos cartas de otro valor."
+  },
+  { 
+    name: "Color", 
+    cards: ["A♠", "10♠", "7♠", "5♠", "3♠"], 
+    highlighted: [0, 1, 2, 3, 4],
+    description: "Cinco cartas del mismo palo, pero no en orden consecutivo."
+  },
+  { 
+    name: "Escalera", 
+    cards: ["5♣", "6♦", "7♠", "8♥", "9♠"], 
+    highlighted: [0, 1, 2, 3, 4],
+    description: "Cinco cartas consecutivas, sin importar el palo."
+  },
+  { 
+    name: "Trío", 
+    cards: ["4♠", "4♦", "4♣", "2♠", "7♥"], 
+    highlighted: [0, 1, 2],
+    description: "Tres cartas del mismo valor."
+  },
+  { 
+    name: "Doble Pareja", 
+    cards: ["9♠", "9♦", "6♠", "6♣", "2♠"], 
+    highlighted: [0, 1, 2, 3],
+    description: "Dos pares de cartas del mismo valor."
+  },
+  { 
+    name: "Pareja", 
+    cards: ["8♠", "8♦", "K♠", "3♣", "5♥"], 
+    highlighted: [0, 1],
+    description: "Dos cartas del mismo valor."
+  },
+  { 
+    name: "Carta Alta", 
+    cards: ["K♠", "J♦", "7♠", "6♣", "2♠"], 
+    highlighted: [0],
+    description: "La carta más alta en caso de que no se tenga ninguna mano combinada."
+  }
 ];
 
 // Función para asignar color a cada carta según el palo
@@ -27,13 +77,14 @@ const getCardColor = (card) => {
 const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
   return (
     isModalOpen && (
-      <div className="fixed inset-0 bg-white overflow-scroll z-10">
-        <div className="bg-white rounded-lg w-full max-w-xl flex justify-between items-start h-full">
-          {/* <h2 className=" font-bold mb-4">Manos de Póker</h2> */}
+      <div className="fixed inset-0 bg-gray-100 overflow-scroll z-10">
+        <div className="rounded-lg w-full max-w-xl flex justify-between items-start h-full">
+          {/* <h2 className="font-bold mb-4">Manos de Póker</h2> */}
           <div className="space-y-2 p-6">
             {pokerHands.map((hand, index) => (
               <div key={index}>
                 <h3 className="text-xs font-semibold mb-1">{hand.name}</h3>
+                
                 <div className="flex gap-1">
                   {hand.cards.map((card, idx) => {
                     // Comprobar si la carta está resaltada
@@ -50,7 +101,7 @@ const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
                       >
                         <div className="relative flex flex-col items-center justify-center">
                           {/* Número/letra en la esquina superior izquierda */}
-                          <span className={`text-[11px] font-medium ${getCardColor(card)} absolute top-0 left-0 transform -translate-x-2 -translate-y-2`}>
+                          <span className={`text-[11px] font-medium ${getCardColor(card)} absolute top-0 left-0 transform -translate-x-[7px] -translate-y-2`}>
                             {number}
                           </span>
                           {/* Símbolo centrado en la carta */}
@@ -62,6 +113,7 @@ const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
                     );
                   })}
                 </div>
+                {/* <p className="text-xs text-gray-600">{hand.description}</p>*/}
               </div>
             ))}
           </div>
