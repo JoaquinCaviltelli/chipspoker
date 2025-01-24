@@ -28,7 +28,7 @@ const SliderButton = ({ fold, isPlayerFolded, currentTurn, user }) => {
 
   useEffect(() => {
     if (isPlayerFolded) {
-      setIsActive(false);  // Si el jugador ha foldado, asegúrate de que isActive sea false
+      setIsActive(true);  // Si el jugador ha foldado, asegúrate de que isActive sea false
     } else {
       setIsActive(false);  // Si el jugador no ha foldado, también es false
     }
@@ -45,8 +45,8 @@ const SliderButton = ({ fold, isPlayerFolded, currentTurn, user }) => {
 
   return (
     <div
-      className={`w-20 h-full bg-gray-200 transition-all relative overflow-hidden ${
-        isActive && 'bg-red-500'
+      className={`w-20 h-full  transition-all relative overflow-hidden rounded-md  ${
+        isActive ? 'bg-[#985858]' : 'bg-gray-200'
       }`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
@@ -54,7 +54,7 @@ const SliderButton = ({ fold, isPlayerFolded, currentTurn, user }) => {
     >
       <button
         className={`absolute left-1/2 transform -translate-x-1/2 p-3 text-white text-center leading-4 text-xs font-semibold rounded-md transition-all w-20 h-16 duration-300 ${
-          currentTurn !== user && !isActive ? 'bg-gray-500' : 'bg-red-500'
+          currentTurn !== user && !isActive ? 'bg-gray-500' : 'bg-[#985858]'
         }`}
         style={{ top: isActive ? '0' : 'calc(100% - 64px)' }}  // El botón empieza en la parte inferior y se mueve hacia arriba
       >

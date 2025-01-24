@@ -127,7 +127,7 @@ const GameRoom = () => {
 
         <button
           onClick={leaveRoom}
-          className="bg-red-800 text-white p-2 px-3 rounded-r flex items-center"
+          className="bg-[#985858] text-white p-2 px-3 rounded-r flex items-center"
           >
           <span className="material-symbols-outlined rotate-180">logout</span>
         </button>

@@ -111,7 +111,7 @@ const BetModal = ({
     }, {});
 
     return (
-      <div className="flex justify-center relative gap-10 mb-4 h-full p-6">
+      <div className="flex justify-center relative gap-10 mb-4 h-full p-6 ">
         {Object.keys(fichesGrouped).map((value) => (
           <div key={value} className="relative -translate-x-8">
             {fichesGrouped[value].map((_, index) => (
@@ -181,7 +181,7 @@ const BetModal = ({
       
   return (
     <div className="w-full flex flex-col justify-between items-center h-full">
-      <div className="flex w-full h-full mb-10 gap-2 flex-row-reverse">
+      <div className="flex w-full h-full mb-10 gap-2 flex-row-reverse ">
         <Slide fold={fold} isPlayerFolded={isPlayerFolded}
           currentTurn={currentTurn} user={user}
         />
@@ -194,18 +194,18 @@ const BetModal = ({
               <div
                 onDoubleClick={handlePass} // Para escritorio
                 onTouchEnd={handleTouch} // Para dispositivos móviles
-                className="bg-green-200 h-full w-full mb-4 flex justify-center items-center flex-col cursor-pointer select-none"
+                className="bg-radial-degradado text-white  h-full w-full mb-4 flex justify-center items-center flex-col cursor-pointer select-none rounded-md"
               >
-                <span className="material-symbols-outlined text-gray-800 text-5xl">
+                <span className="material-symbols-outlined text-5xl">
                   touch_double
                 </span>
-                <span className="text-gray-700 font-medium text-xl">Paso</span>
+                <span className=" font-medium text-xl">Paso</span>
                 {/* <span className="text-gray-700 text-xs">(docle touch)</span> */}
 
               </div>
             ) : (
               <div className={`h-full w-full mb-4 flex justify-center items-center ${
-                isPlayerFolded ? "bg-red-500" : "bg-gray-200 "
+                isPlayerFolded ? "bg-degradado" : "bg-gray-200 "
               }`}>
                 <span className={`material-symbols-outlined  text-5xl ${
                 isPlayerFolded ? "text-white" : "text-gray-500"
@@ -216,10 +216,12 @@ const BetModal = ({
             )}
           </>
         ) : (
-          <div className="bg-green-200 h-full w-full mb-4 select-none">
-            {/* Área donde se acumulan las fichas seleccionadas */}
-            {renderSelectedFiches()}
-          </div>
+          <div className="bg-radial-degradado rounded-md h-full w-full mb-4 select-none">
+  {/* Área donde se acumulan las fichas seleccionadas */}
+  {renderSelectedFiches()}
+</div>
+
+        
         )}
       </div>
 

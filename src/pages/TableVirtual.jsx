@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useRoom } from "../services/RoomService";
 import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
-import { Carta } from '/src/components/Card.jsx';
+import { Carta } from "/src/components/Card.jsx";
 
 const TableVirtual = () => {
   const { user, userData, loading, admin } = useContext(AuthContext);
@@ -12,8 +12,6 @@ const TableVirtual = () => {
   const navigate = useNavigate();
   const [round, setRound] = useState(0);
   const [currentTurn, setCurrentTurn] = useState(null);
-
-
 
   // Memoize players for better performance and automatic sorting
   const players = useMemo(() => {
@@ -34,17 +32,17 @@ const TableVirtual = () => {
     }
     const roomRef = doc(db, "rooms", "default-room");
 
-  // Suscribirse a los cambios en el documento de la sala
-  const unsubscribe = onSnapshot(roomRef, (docSnapshot) => {
-    if (docSnapshot.exists()) {
-      const roomData = docSnapshot.data();
-      setRound(roomData?.round || 0);
-      setCurrentTurn(roomData?.currentTurn || null);
-    }
-  });
+    // Suscribirse a los cambios en el documento de la sala
+    const unsubscribe = onSnapshot(roomRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const roomData = docSnapshot.data();
+        setRound(roomData?.round || 0);
+        setCurrentTurn(roomData?.currentTurn || null);
+      }
+    });
 
-  // Limpiar la suscripción al desmontar el componente
-  return () => unsubscribe();
+    // Limpiar la suscripción al desmontar el componente
+    return () => unsubscribe();
   }, [loading, user, admin, navigate]);
 
   useEffect(() => {
@@ -124,22 +122,19 @@ const TableVirtual = () => {
   const getCardsToShow = () => {
     const totalCards = 5;
     const faceUpCards = round === 1 ? 2 : round === 2 ? 1 : round === 3 ? 0 : 5;
-  
+
     const cards = [
       ...Array(faceUpCards).fill({
-        
         isFlipped: true,
       }),
       ...Array(totalCards - faceUpCards).fill({
-        
         isFlipped: false,
       }),
     ];
-  
+
     // Invertir el orden de las cartas para que se muestren de izquierda a derecha
     return cards.reverse();
   };
-  
 
   const getAction = (player) => {
     switch (player.status) {
@@ -164,32 +159,33 @@ const TableVirtual = () => {
 
   return (
     <div className="max-w-3xl m-auto p-6">
-      <div className="mt-6 flex justify-center space-x-4">
+      <div className="mt-6 flex justify-center space-x-4 mx-6">
         <button
           onClick={resetRound}
-          className="bg-red-500 text-white px-6 py-2 rounded-md"
+          className="bg-[#985858] text-white px-6 py-2 rounded-md"
         >
-          Reiniciar Ronda
+          Reiniciar
         </button>
         <button
           onClick={nextRound}
           className={`px-6 py-2 rounded-md ${
-            round === 4 ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 text-white"
+            round === 4
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-[#5B7661] text-white"
           }`}
           disabled={round === 4}
         >
-          Siguiente Ronda
+          Siguiente
         </button>
       </div>
 
       <div className="flex justify-center space-x-2 mt-8 mb-2">
-  {getCardsToShow().map((card, index) => (
-    <div key={index} className="card-container">
-      <Carta isFlipped={card.isFlipped} />
-    </div>
-  ))}
-</div>
-
+        {getCardsToShow().map((card, index) => (
+          <div key={index} className="card-container">
+            <Carta isFlipped={card.isFlipped} />
+          </div>
+        ))}
+      </div>
 
       <h2 className="text-xl text-gray-600 font-bold text-center">
         {["Preflop", "Flop", "Rivers", "Turn"][round] || ""}
@@ -201,7 +197,7 @@ const TableVirtual = () => {
       <div className="my-6">
         <ul className="flex justify-center flex-wrap items-center gap-6">
           {players.map((player) => {
-            console.log("Player ID:", player.id, "Current Turn:", currentTurn);
+            
             return (
               <li
                 key={player.id}
@@ -212,6 +208,8 @@ const TableVirtual = () => {
                     className={
                       player.id === currentTurn
                         ? "text-[#5B7661]"
+                        : player.status === "folded"
+                        ? "text-[#985858]" // Cambia el fondo a rojo si está folded
                         : "text-gray-700"
                     }
                   >
@@ -220,7 +218,11 @@ const TableVirtual = () => {
                 </div>
                 <div
                   className={`flex flex-col justify-center items-center text-white w-36 h-16 rounded-lg text-lg ${
-                    player.id === currentTurn ? "bg-[#5B7661]" : "bg-gray-700"
+                    player.id === currentTurn
+                      ? "bg-[#5B7661]"
+                      : player.status === "folded"
+                      ? "bg-[#985858]" // Cambia el fondo a rojo si está folded
+                      : "bg-gray-700"
                   }`}
                 >
                   <span>{player.name}</span>
