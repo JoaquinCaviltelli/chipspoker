@@ -4,7 +4,7 @@ import backCard from '/src/assets/boca_abajo.jpg';
 
 export const Carta = ({ isFlipped }) => {
   return (
-    <div className="w-32 h-44 perspective-1000 group cursor-pointer">
+    <div className="card perspective-1000 group cursor-pointer">
       <div
         className={`relative w-full h-full transition-transform duration-700 transform-style-3d   rounded-md shadow-lg ${isFlipped ? "rotate-y-180" : ""}`}
       >
