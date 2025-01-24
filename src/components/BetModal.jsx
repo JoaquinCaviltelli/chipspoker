@@ -208,7 +208,7 @@ const BetModal = ({
               <div className={`h-full w-full mb-4 flex justify-center items-center rounded-md ${
                 isPlayerFolded ? "bg-degradado" : "bg-gray-200 "
               }`}>
-                <span className={`material-symbols-outlined  text-5xl ${
+                <span className={`material-symbols-outlined  text-5xl rotar ${
                 isPlayerFolded ? "text-white" : "text-gray-500"
               }`}>
                   hourglass_top

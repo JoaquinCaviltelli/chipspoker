@@ -52,3 +52,25 @@
     background: radial-gradient(circle, #7e4a4a, #985858);
   }
   
+  @keyframes rotar180 {
+    0% {
+      transform: rotate(0deg);
+    }
+    20% {
+      transform: rotate(180deg);
+    }
+    50% {
+      transform: rotate(180deg);
+    }
+    70% {
+      transform: rotate(360deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .rotar {
+    animation: rotar180 5s ease-out infinite; /* Rota cada 2 segundos, infinitamente */
+  }
+  
