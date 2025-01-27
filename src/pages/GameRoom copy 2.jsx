@@ -18,7 +18,15 @@ const GameRoom = () => {
   const [currentTurn, setCurrentTurn] = useState(null);
   const [currentBet, setCurrentBet] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para abrir/cerrar el modal
-const [playerData, setPlayerData] = useState({});
+const [playerData, setPlayerData] = useState({
+    id: user?.uid || "",
+    name: userData?.name || "",
+    balance: userData?.balance || 0,
+    bet: 0,
+    totalBetInRound: 0,
+    order: 1, // Suponiendo que el primer jugador tiene orden 1
+    status: "none", // Estado inicial es "none"
+  });
 
   const roomRef = doc(db, "rooms", ROOM_ID);
 
@@ -30,7 +38,6 @@ const [playerData, setPlayerData] = useState({});
         const playerInRoom = roomData.players[user.uid];
         setPlayerData(prevState => ({
           ...prevState,
-          name: playerInRoom.name,
           balance: playerInRoom.balance,
           bet: playerInRoom.bet,
           totalBetInRound: playerInRoom.totalBetInRound,
@@ -38,7 +45,7 @@ const [playerData, setPlayerData] = useState({});
           status: playerInRoom.status,
         }));
       }
-    }, [loading, user, userData, players, roomData, isUserInRoom]);
+    }, [loading, user, userData, roomData, isUserInRoom]);
 
   const fetchGameData = useCallback(async () => {
     try {
@@ -85,22 +92,20 @@ const [playerData, setPlayerData] = useState({});
   };
 
   const handleBet = async (amount) => {
-    if (!isPlayerTurn || playerData.balance < amount) {
+    if (!isPlayerTurn || userData.balance < amount) {
       alert("Saldo insuficiente para realizar esta apuesta.");
       return;
     }
 
     try {
-      const newBalance = playerData.balance - amount;
-      const updatedBet = playerData.bet + amount;
-      const updatedTotalBet = playerData.totalBetInRound + amount;
+      const newBalance = userData.balance - amount;
+      const updatedBet = (players.find((p) => p.id === user.uid)?.betAmount || 0) + amount;
       const roomDoc = await getDoc(roomRef);
       const currentPot = roomDoc.data()?.pot || 0;
 
-      // await updateDoc(doc(db, "users", user.uid), { balance: newBalance });
+      await updateDoc(doc(db, "users", user.uid), { balance: newBalance });
       await updateRoom({
-        [`players.${user.uid}.bet`]: updatedBet,
-        [`players.${user.uid}.totalBetInRound`]: updatedTotalBet,
+        [`players.${user.uid}.betAmount`]: updatedBet,
         [`players.${user.uid}.balance`]: newBalance,
         pot: currentPot + amount,
       });
@@ -154,12 +159,11 @@ const [playerData, setPlayerData] = useState({});
         </button>
         <div className="flex gap-2 my-6 mx-3">
           <h1 className="text-3xl text-gray-800 font-bold">
-            {playerData.name}
+            {userData?.name}
           </h1>
           <span className="text-sm text-gray-800 font-bold">
-            {playerData.balance}
+            {userData?.balance}
           </span>
-          
         </div>
           </div>
       {/* Botón para abrir el modal con las manos de póker */}
@@ -192,7 +196,6 @@ playing_cards
         onResetBet={() => setCurrentBet(0)}
         onConfirmBet={() => handleBet(currentBet)}
         currentBet={currentBet}
-        playerData={playerData}
       />
     </div>
   );

@@ -6,8 +6,8 @@ import { collection, query, orderBy, getDocs, doc, setDoc, getDoc } from "fireba
 import { db } from "../firebase";
 
 const Home = () => {
-  const { user, userData, loading, admin } = useContext(AuthContext);  // Asegúrate de que admin esté disponible en el contexto
-  const { roomData, isUserInRoom } = useRoom(); // Usa los datos de la sala
+  const { user, userData, loading, admin } = useContext(AuthContext);
+  const { roomData, isUserInRoom } = useRoom();
   const navigate = useNavigate();
   const [ranking, setRanking] = useState([]);
 
@@ -15,17 +15,17 @@ const Home = () => {
     // Redirigir si el usuario es admin
     if (admin) {
       navigate("/table-virtual");
-      return; // No ejecutar más lógica si ya se redirigió
+      return;
     }
 
     if (!loading && (!user || !userData)) {
       navigate("/register");
     } else if (user && isUserInRoom(user.uid)) {
-      // Si el usuario ya está en la sala, redirige
       navigate("/game-room");
     }
-  }, [user, userData, loading, navigate, isUserInRoom, admin]);  // Asegúrate de agregar admin a las dependencias
+  }, [user, userData, loading, navigate, isUserInRoom, admin]);
 
+  // Fetch ranking solo una vez
   useEffect(() => {
     const fetchRanking = async () => {
       try {
@@ -43,36 +43,30 @@ const Home = () => {
     };
 
     fetchRanking();
-  }, [ranking]);
+  }, []); // Solo se ejecuta al montar el componente
 
   const joinRoom = async () => {
     try {
-      // Referencia a la sala
       const roomRef = doc(db, "rooms", "default-room");
-  
-      // Obtener los jugadores actuales de la sala
       const roomDoc = await getDoc(roomRef);
       const roomData = roomDoc.data();
       const players = roomData?.players || {};
-  
-      // Encontrar el siguiente número de orden disponible
+
       const playerIds = Object.keys(players);
       const existingOrders = playerIds.map(id => players[id].order).filter(order => order !== undefined);
       const nextOrder = existingOrders.length > 0 ? Math.max(...existingOrders) + 1 : 1;
-  
-      // Crear el nuevo jugador con su orden
+
       const player = {
         id: user.uid,
         name: userData.name,
         balance: userData.balance,
-        order: nextOrder,  // Asignar el orden consecutivo
-        status: "none"
+        bet: 0,
+        totalBetInRound: 0,
+        order: nextOrder,
+        status: "none",
       };
-  
-      // Agregar el nuevo jugador a la sala
+
       await setDoc(roomRef, { players: { [user.uid]: player } }, { merge: true });
-  
-      // Redirigir al jugador a la sala del juego
       navigate("/game-room");
     } catch (error) {
       console.error("Error al unirse a la sala:", error);

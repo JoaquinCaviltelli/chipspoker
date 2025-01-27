@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext"; // Accede al contexto
 import Slide from "/src/components/slide.jsx";
+import { doc, getDoc } from "firebase/firestore"; // Importa getDoc
+import { db } from "/src/firebase.js";
 
 // Estilo de las fichas basado en el código que compartiste
 const estiloFicha = {
@@ -64,7 +66,8 @@ const BetModal = ({
   onConfirmBet,
   currentBet,
   players,
-  isPlayerFolded
+  isPlayerFolded,
+  playerData
 }) => {
   const { userData, updateBalance } = useContext(AuthContext); // Accede a userData y la función updateBalance
   const [selectedFiches, setSelectedFiches] = useState([]);
@@ -76,9 +79,27 @@ const BetModal = ({
 
   // Efecto para sincronizar el balance simulado con el balance real
   useEffect(() => {
-    setSimulatedBalance(userData.balance); // Inicializa el balance simulado al balance real
-    
-  }, [userData.balance]);
+    const fetchBalance = async () => {
+      if (user) {
+        try {
+          const userRef = doc(db, "users", user); // Obtén el documento de usuario usando su UID
+          const userSnapshot = await getDoc(userRef); // Obtén el documento de Firestore
+  
+          if (userSnapshot.exists()) {
+            const userData = userSnapshot.data(); // Extrae los datos del documento
+            setSimulatedBalance(userData.balance); // Establece el balance simulado con el valor obtenido
+          } else {
+            console.log("No se encontró el documento del usuario");
+          }
+        } catch (error) {
+          console.error("Error al obtener el balance desde Firestore:", error);
+        }
+      }
+    };
+  
+    fetchBalance(); // Llama a la función para obtener el balance
+  
+  }, [round]);
 
   // Función para manejar el doble toque en dispositivos móviles
   const handleTouch = (event) => {
@@ -257,6 +278,7 @@ const BetModal = ({
             ))}
           </div>
         ))}
+        
       </div>
 
       {/* Botones para resetear, confirmar y cerrar */}
