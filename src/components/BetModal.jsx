@@ -72,6 +72,7 @@ const BetModal = ({
   const [touchCount, setTouchCount] = useState(0);
   const [lastTouchTime, setLastTouchTime] = useState(0);
   const touchThreshold = 300; // Tiempo máximo entre toques para considerar un doble toque en ms
+  const [isActive, setIsActive] = useState(false);
 
   // Efecto para sincronizar el balance simulado con el balance real
   useEffect(() => {
@@ -185,6 +186,9 @@ const BetModal = ({
       <div className="flex w-full h-full mb-10 gap-2 flex-row-reverse ">
         <Slide fold={fold} isPlayerFolded={isPlayerFolded}
           currentTurn={currentTurn} user={user}
+          handleResetBet={handleResetBet}
+          isActive={isActive}
+          setIsActive={setIsActive}
         />
 
         {!currentBet ? (

@@ -26,7 +26,7 @@ const Register = () => {
       const userRef = doc(db, "users", currentUser.uid);
       await setDoc(userRef, {
         name,
-        balance: 0,
+        balance: 3000,
         admin: false,
       });
 

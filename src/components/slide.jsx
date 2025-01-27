@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-const SliderButton = ({ fold, isPlayerFolded, currentTurn, user }) => {
-  const [isActive, setIsActive] = useState(false);
+const SliderButton = ({ fold, isPlayerFolded, currentTurn, user, handleResetBet, isActive, setIsActive }) => {
+  
   const [startY, setStartY] = useState(0);  // Mantener startY para el movimiento vertical
   const [isSliding, setIsSliding] = useState(false);
 
@@ -29,6 +29,7 @@ const SliderButton = ({ fold, isPlayerFolded, currentTurn, user }) => {
   useEffect(() => {
     if (isPlayerFolded) {
       setIsActive(true);  // Si el jugador ha foldado, asegúrate de que isActive sea false
+      handleResetBet()
     } else {
       setIsActive(false);  // Si el jugador no ha foldado, también es false
     }
