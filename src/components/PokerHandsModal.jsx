@@ -78,7 +78,7 @@ const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
   return (
     isModalOpen && (
       <div className="fixed inset-0 bg-white overflow-scroll z-10">
-        <div className="rounded-lg w-full max-w-3xl mx-auto flex justify-between items-start h-full">
+        <div className="rounded-lg w-full max-w-3xl mx-auto flex justify-center items-start h-full">
           {/* <h2 className="font-bold mb-4">Manos de Póker</h2> */}
           <div className="space-y-2 p-6">
             {pokerHands.map((hand, index) => (
@@ -101,11 +101,11 @@ const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
                       >
                         
                           {/* Número/letra en la esquina superior izquierda */}
-                          <span className={`text-lg font-medium leading-4 ${getCardColor(card)} `}>
+                          <span className={`text-base font-medium leading-4 ${getCardColor(card)} `}>
                             {suit}
                           </span>
                           {/* Símbolo centrado en la carta */}
-                          <span className={`text-lg leading-6 ${getCardColor(card)}`}>
+                          <span className={`text-base leading-6 ${getCardColor(card)}`}>
                             {number}
                           </span>
                         
@@ -119,7 +119,7 @@ const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
           </div>
           <button
             onClick={toggleModal}
-            className="py-7 px-4"
+            className="py-7 px-4 absolute right-0"
           >
             <span className="material-symbols-outlined text-gray-800 font-bold">
               close

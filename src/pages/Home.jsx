@@ -11,7 +11,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [ranking, setRanking] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState("");
-  const [transferAmount, setTransferAmount] = useState(0);
+  const [transferAmount, setTransferAmount] = useState();
   const [transferError, setTransferError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
 
@@ -142,42 +142,55 @@ sync_alt
 
 
       {/* Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-white text-gray-600  flex justify-center items-center z-50">
-          <div className="bg-white p-6  w-96">
-            <h2 className="text-xl text-gray-600 font-semibold mb-4">Transferir Balance</h2>
-            <form onSubmit={handleTransfer}>
-              <select
-                value={selectedUserId}
-                onChange={(e) => setSelectedUserId(e.target.value)}
-                className="border p-2 mb-2 w-full"
+      {/* Modal */}
+{isModalOpen && (
+  <div className="fixed inset-0 bg-white text-gray-600 overflow-scroll flex justify-center items-start z-50">
+    <div className="bg-white p-6  w-96">
+      <h2 className="text-xl text-gray-600 font-semibold mb-4">Transferir</h2>
+      <form onSubmit={handleTransfer}>
+        {/* Lista de jugadores */}
+        <div className="mb-4">
+          
+          <div className="grid  gap-2">
+            {ranking.map((user) => (
+              <button
+                key={user.id}
+                type="button"
+                onClick={() => setSelectedUserId(user.id)}
+                className={`border text-sm rounded p-2 w-full text-left ${selectedUserId === user.id ? 'bg-[#7CA084] text-white' : 'bg-white'}`}
               >
-                <option value="" disabled>Selecciona un jugador</option>
-                {ranking.map((user) => (
-                  <option key={user.id} value={user.id}>{user.name}</option>
-                ))}
-              </select>
-              <input
-                type="number"
-                placeholder="Monto a transferir"
-                value={transferAmount}
-                onChange={(e) => setTransferAmount(Number(e.target.value))}
-                className="border p-2 mb-2 w-full"
-              />
-              {transferError && <p className="text-red-500">{transferError}</p>}
-              <button type="submit" className="bg-[#7CA084] w-full text-white px-4 py-2 rounded-md">
-                Transferir
+                {user.name}
               </button>
-            </form>
-            <button
-              onClick={() => setIsModalOpen(false)} // Cerrar el modal sin hacer nada
-              className="bg-gray-300 text-gray-700 w-full mt-4 py-2 rounded-md"
-            >
-              Cerrar
-            </button>
+            ))}
           </div>
         </div>
-      )}
+
+        <input
+          type="number"
+          placeholder="Monto"
+          value={transferAmount}
+          onChange={(e) => setTransferAmount(Number(e.target.value))}
+          className="border border-[#7CA084] text-[#7CA084] placeholder:text-[#7CA084] rounded p-2 mb-4 w-full mt-6 outline-none font-semibold"
+        />
+        {transferError && <p className="text-red-500">{transferError}</p>}
+        <button type="submit" className="bg-[#7CA084] w-full text-white px-4 py-2 rounded-md">
+          Transferir
+        </button>
+      </form>
+      <button
+        onClick={() => {
+          setIsModalOpen(false); // Cerrar el modal
+          setSelectedUserId(""); // Resetear la selección
+          setTransferAmount(); // Resetear el monto
+        }}
+        className="bg-gray-300 text-gray-700 w-full mt-4 py-2 rounded-md"
+      >
+        Cerrar
+      </button>
+    </div>
+  </div>
+)}
+
 
       <div className="w-full mt-8">
         <h2 className="text-xl text-gray-600 font-semibold mb-2">Ranking</h2>
