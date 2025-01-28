@@ -49,13 +49,12 @@ const TableVirtual = () => {
     // Si estamos en la ronda 4, establece currentTurn a null
     if (round === 4) {
       setCurrentTurn(null);
-    } 
+    }
     // Inicia el primer turno automáticamente si no hay turnos asignados
     else if (round === 0 && currentTurn === null && players.length > 0) {
       updateGameState({ currentTurn: players[0].id });
     }
   }, [round, currentTurn, players]);
-  
 
   const updateGameState = async (updates) => {
     try {
@@ -128,7 +127,8 @@ const TableVirtual = () => {
 
   const getCardsToShow = () => {
     const totalCards = 5;
-    const faceUpCards = round === 1 ? 2 : round === 2 ? 1 : round === 3 ? 0 : 5;
+    const faceUpCards =
+      round === 1 ? 2 : round === 2 ? 1 : round === 3 ? 0 : round === 4 ? 0 : 5;
 
     const cards = [
       ...Array(faceUpCards).fill({
@@ -157,7 +157,12 @@ const TableVirtual = () => {
   };
 
   const handlePlayerSelection = (player) => {
-    if(roomData?.pot !== 0){
+    // Verificar si el jugador está "folded" o no tiene apuesta
+    if (
+      player.status !== "folded" &&
+      player.totalBetInRound > 0 &&
+      roomData?.pot !== 0
+    ) {
       setSelectedPlayers((prevSelectedPlayers) => {
         if (prevSelectedPlayers.includes(player.id)) {
           return prevSelectedPlayers.filter((id) => id !== player.id);
@@ -166,68 +171,75 @@ const TableVirtual = () => {
         }
       });
     }
-    };
+  };
 
-    const handleDistributePot = async () => {
-      if (round === 4 && selectedPlayers.length > 0) { // Permitir múltiples jugadores seleccionados
-        const selectedPlayersData = selectedPlayers.map(playerId => 
-          players.find(p => p.id === playerId)
-        ).filter(Boolean);
-    
-        if (selectedPlayersData.length === 0) return;
-    
-        try {
-          const totalPot = roomData?.pot || 0;
-    
-          // Encuentra la menor apuesta entre los jugadores seleccionados
-          const minSelectedBet = Math.min(...selectedPlayersData.map(player => player.totalBetInRound || 0));
-    
-          // Calcular la diferencia con respecto a las apuestas de los demás jugadores
-          const otherPlayers = players.filter(p => !selectedPlayers.includes(p.id));
-          const totalDifference = otherPlayers.reduce((acc, player) => {
-            const otherBet = player.totalBetInRound || 0;
-            return acc + Math.max(0, otherBet - minSelectedBet);
-          }, 0);
-    
-          // Calcular la cantidad total que los jugadores seleccionados deberían recibir
-          const amountToWin = totalPot - totalDifference;
-    
-          // Calcular la cantidad que cada jugador seleccionado debería recibir
-          const totalSelectedBet = selectedPlayersData.reduce((acc, player) => acc + (player.totalBetInRound || 0), 0);
-          const updates = {};
-          
-          for (const selectedPlayer of selectedPlayersData) {
-            const selectedBet = selectedPlayer.totalBetInRound || 0;
-            
-            // Calcular la parte del pozo que corresponde a este jugador
-            const playerShare = (selectedBet / totalSelectedBet) * amountToWin;
-    
-            // Asegúrate de que no se le dé más de lo que hay en el pot
-            const finalAmountToWin = Math.max(0, Math.min(playerShare, totalPot));
-    
-            // Actualizar el balance del jugador seleccionado
-            const userRef = doc(db, "users", selectedPlayer.id);
-            updates[`players.${selectedPlayer.id}.balance`] = selectedPlayer.balance + finalAmountToWin;
-            await updateDoc(userRef, {
-              balance: selectedPlayer.balance + finalAmountToWin,
-            });
-          }
-          
-          // Actualizar el pot restando solo lo que se distribuyó
-          updates.pot = totalPot - (amountToWin); // Reducir el pot por la cantidad total ganada
-    
-          // Aplicar las actualizaciones a Firestore
-          await updateGameState(updates);
-    
-          // Limpiar la selección de jugadores
-          setSelectedPlayers([]);
-        } catch (error) {
-          console.error("Error al distribuir el pot:", error);
+  const handleDistributePot = async () => {
+    if (round === 4 && selectedPlayers.length > 0) {
+      // Permitir múltiples jugadores seleccionados
+      const selectedPlayersData = selectedPlayers
+        .map((playerId) => players.find((p) => p.id === playerId))
+        .filter(Boolean);
+
+      if (selectedPlayersData.length === 0) return;
+
+      try {
+        const totalPot = roomData?.pot || 0;
+
+        // Encuentra la menor apuesta entre los jugadores seleccionados
+        const minSelectedBet = Math.min(
+          ...selectedPlayersData.map((player) => player.totalBetInRound || 0)
+        );
+
+        // Calcular la diferencia con respecto a las apuestas de los demás jugadores
+        const otherPlayers = players.filter(
+          (p) => !selectedPlayers.includes(p.id)
+        );
+        const totalDifference = otherPlayers.reduce((acc, player) => {
+          const otherBet = player.totalBetInRound || 0;
+          return acc + Math.max(0, otherBet - minSelectedBet);
+        }, 0);
+
+        // Calcular la cantidad total que los jugadores seleccionados deberían recibir
+        const amountToWin = totalPot - totalDifference;
+
+        // Calcular la cantidad que cada jugador seleccionado debería recibir
+        const totalSelectedBet = selectedPlayersData.reduce(
+          (acc, player) => acc + (player.totalBetInRound || 0),
+          0
+        );
+        const updates = {};
+
+        for (const selectedPlayer of selectedPlayersData) {
+          const selectedBet = selectedPlayer.totalBetInRound || 0;
+
+          // Calcular la parte del pozo que corresponde a este jugador
+          const playerShare = (selectedBet / totalSelectedBet) * amountToWin;
+
+          // Asegúrate de que no se le dé más de lo que hay en el pot
+          const finalAmountToWin = Math.max(0, Math.min(playerShare, totalPot));
+
+          // Actualizar el balance del jugador seleccionado
+          const userRef = doc(db, "users", selectedPlayer.id);
+          updates[`players.${selectedPlayer.id}.balance`] =
+            selectedPlayer.balance + finalAmountToWin;
+          await updateDoc(userRef, {
+            balance: selectedPlayer.balance + finalAmountToWin,
+          });
         }
+
+        // Actualizar el pot restando solo lo que se distribuyó
+        updates.pot = totalPot - amountToWin; // Reducir el pot por la cantidad total ganada
+
+        // Aplicar las actualizaciones a Firestore
+        await updateGameState(updates);
+
+        // Limpiar la selección de jugadores
+        setSelectedPlayers([]);
+      } catch (error) {
+        console.error("Error al distribuir el pot:", error);
       }
-    };
-    
-  
+    }
+  };
 
   if (loading) {
     return (
@@ -239,44 +251,54 @@ const TableVirtual = () => {
 
   return (
     <div className="max-w-3xl m-auto p-6">
-      <div className="mt-6 flex justify-center space-x-4 mx-6">
+      <div className="flex justify-center space-x-2 mt-20 mb-2">
+        {getCardsToShow().map((card, index) => (
+          <div key={index} className="card-container">
+            <Carta isFlipped={card.isFlipped} round={round} />
+          </div>
+        ))}
+      </div>
+
+      {/* <div className="mt-6 flex justify-center space-x-4 mx-6"></div> */}
+
+      <div className="flex justify-center h-20 my-10">
         <button
           onClick={resetRound}
           className="bg-[#985858] text-white px-6 py-2 rounded-md"
         >
           Reiniciar
         </button>
+          
+        <div className="w-52 flex flex-col justify-center items-center">
+
+        <h2 className="text-xl text-gray-600 font-bold text-center">
+          {["Preflop", "Flop", "Rivers", "Turn"][round] || ""}
+        </h2>
+        <h2 className="text-2xl text-[#5B7661] font-bold text-center">
+          {roomData?.pot || 0}
+        </h2>
+        {round === 4 && roomData?.pot !== 0 && (
+          <button
+            onClick={handleDistributePot}
+            className="px-6 py-2 rounded  bg-[#5B7661] text-white"
+            >
+            Distribuir
+          </button>
+        )}
+        </div>
+
         <button
           onClick={nextRound}
-          className={`px-6 py-2 rounded-md ${round === 4 ? "bg-gray-400 cursor-not-allowed" : "bg-[#5B7661] text-white"}`}
+          className={`px-6 py-2 rounded-md ${
+            round === 4
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-[#5B7661] text-white"
+          }`}
           disabled={round === 4}
         >
           Siguiente
         </button>
-        {round === 4 && roomData?.pot !== 0 && (
-          <button
-            onClick={handleDistributePot}
-            className="px-6 py-2 rounded-md bg-[#5B7661] text-white"
-          >
-            Distribuir Pot
-          </button>
-        )}
       </div>
-
-      <div className="flex justify-center space-x-2 mt-8 mb-2">
-        {getCardsToShow().map((card, index) => (
-          <div key={index} className="card-container">
-            <Carta isFlipped={card.isFlipped} />
-          </div>
-        ))}
-      </div>
-
-      <h2 className="text-xl text-gray-600 font-bold text-center">
-        {["Preflop", "Flop", "Rivers", "Turn"][round] || ""}
-      </h2>
-      <h2 className="text-xl text-red-800 font-bold text-center">
-        {roomData?.pot || 0}
-      </h2>
 
       <div className="my-6">
         <ul className="flex justify-center flex-wrap items-center gap-6">
@@ -297,7 +319,6 @@ const TableVirtual = () => {
                         : "text-gray-700"
                     }
                   >
-                    
                     {getAction(player)}
                   </span>
                 </div>
@@ -314,13 +335,12 @@ const TableVirtual = () => {
                 >
                   <span>{player.name}</span>
                   <div>
-                  <span className="text-sm">{player.balance}k</span>
-
+                    <span className="text-sm">{player.balance}k</span>
                   </div>
-
                 </div>
-                  <span className="text-xs text-gray-600 self-end pr-4 py-1">{player.totalBetInRound} </span>
-                  
+                <span className="text-xs text-gray-600 self-end pr-4 py-1">
+                  {player.totalBetInRound}{" "}
+                </span>
               </li>
             );
           })}
