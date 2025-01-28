@@ -168,44 +168,65 @@ const TableVirtual = () => {
     }
     };
 
-  const handleDistributePot = async () => {
-    if (round === 4 && selectedPlayers.length > 0) {
-      try {
-        const totalPot = roomData?.pot || 0;
-        const distributionAmount = totalPot / selectedPlayers.length;
-  
-        // Primero, recolecta las promesas de actualización de los balances de los jugadores
-        const userUpdates = selectedPlayers.map((playerId) => {
-          const player = players.find((p) => p.id === playerId);
-          const userRef = doc(db, "users", playerId);
-          return updateDoc(userRef, {
-            balance: player.balance + distributionAmount,
-          });
-        });
-  
-        // Espera a que todas las promesas de actualización de los balances de los jugadores se resuelvan
-        await Promise.all(userUpdates);
-  
-        // Ahora, actualiza el estado de la sala (pot a 0 y balances de los jugadores)
-        const updates = selectedPlayers.reduce((acc, playerId) => {
-          const player = players.find((p) => p.id === playerId);
-          acc[`players.${playerId}.balance`] = player.balance + distributionAmount;
-          return acc;
-        }, {});
-  
-        // Actualiza el pot a 0
-        updates.pot = 0;
-  
-        // Aplica las actualizaciones a Firestore
-        await updateGameState(updates);
-  
-        // Limpiar la selección de jugadores
-        setSelectedPlayers([]);
-      } catch (error) {
-        console.error("Error al distribuir el pot:", error);
+    const handleDistributePot = async () => {
+      if (round === 4 && selectedPlayers.length > 0) { // Permitir múltiples jugadores seleccionados
+        const selectedPlayersData = selectedPlayers.map(playerId => 
+          players.find(p => p.id === playerId)
+        ).filter(Boolean);
+    
+        if (selectedPlayersData.length === 0) return;
+    
+        try {
+          const totalPot = roomData?.pot || 0;
+    
+          // Encuentra la menor apuesta entre los jugadores seleccionados
+          const minSelectedBet = Math.min(...selectedPlayersData.map(player => player.totalBetInRound || 0));
+    
+          // Calcular la diferencia con respecto a las apuestas de los demás jugadores
+          const otherPlayers = players.filter(p => !selectedPlayers.includes(p.id));
+          const totalDifference = otherPlayers.reduce((acc, player) => {
+            const otherBet = player.totalBetInRound || 0;
+            return acc + Math.max(0, otherBet - minSelectedBet);
+          }, 0);
+    
+          // Calcular la cantidad total que los jugadores seleccionados deberían recibir
+          const amountToWin = totalPot - totalDifference;
+    
+          // Calcular la cantidad que cada jugador seleccionado debería recibir
+          const totalSelectedBet = selectedPlayersData.reduce((acc, player) => acc + (player.totalBetInRound || 0), 0);
+          const updates = {};
+          
+          for (const selectedPlayer of selectedPlayersData) {
+            const selectedBet = selectedPlayer.totalBetInRound || 0;
+            
+            // Calcular la parte del pozo que corresponde a este jugador
+            const playerShare = (selectedBet / totalSelectedBet) * amountToWin;
+    
+            // Asegúrate de que no se le dé más de lo que hay en el pot
+            const finalAmountToWin = Math.max(0, Math.min(playerShare, totalPot));
+    
+            // Actualizar el balance del jugador seleccionado
+            const userRef = doc(db, "users", selectedPlayer.id);
+            updates[`players.${selectedPlayer.id}.balance`] = selectedPlayer.balance + finalAmountToWin;
+            await updateDoc(userRef, {
+              balance: selectedPlayer.balance + finalAmountToWin,
+            });
+          }
+          
+          // Actualizar el pot restando solo lo que se distribuyó
+          updates.pot = totalPot - (amountToWin); // Reducir el pot por la cantidad total ganada
+    
+          // Aplicar las actualizaciones a Firestore
+          await updateGameState(updates);
+    
+          // Limpiar la selección de jugadores
+          setSelectedPlayers([]);
+        } catch (error) {
+          console.error("Error al distribuir el pot:", error);
+        }
       }
-    }
-  };
+    };
+    
   
 
   if (loading) {
@@ -263,7 +284,7 @@ const TableVirtual = () => {
             return (
               <li
                 key={player.id}
-                className="flex flex-col items-center font-semibold"
+                className="flex flex-col items-center font-semibold cursor-pointer"
                 onClick={() => round === 4 && handlePlayerSelection(player)} // Solo se puede seleccionar en la ronda 4
               >
                 <div className="mb-4 text-xl font-bold text-center">
@@ -283,7 +304,7 @@ const TableVirtual = () => {
                 <div
                   className={`flex flex-col justify-center items-center text-white w-36 h-16 rounded-lg text-lg ${
                     selectedPlayers.includes(player.id)
-                      ? "bg-blue-500" // Resaltar con azul si está seleccionado
+                      ? "bg-[#5B7661]" // Resaltar con azul si está seleccionado
                       : player.id === currentTurn
                       ? "bg-[#5B7661]"
                       : player.status === "folded"

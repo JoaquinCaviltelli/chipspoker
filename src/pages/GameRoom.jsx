@@ -142,7 +142,7 @@ const [playerData, setPlayerData] = useState({});
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col justify-center">
+    <div className="fixed inset-0 flex flex-col justify-center max-w-3xl mx-auto">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
 

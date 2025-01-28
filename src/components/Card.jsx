@@ -1,5 +1,5 @@
 
-import card from '/src/assets/as.png';
+import card from '/src/assets/cartaAs.png';
 import backCard from '/src/assets/boca_abajo.jpg';
 
 export const Carta = ({ isFlipped }) => {

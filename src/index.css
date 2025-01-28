@@ -22,6 +22,7 @@
   .card {
     /* Esto ajusta el tamaño de las cartas al ancho de la pantalla, manteniendo la relación de aspecto */
     width: 16vw; /* Ajusta este valor según lo que consideres apropiado */
+    max-width: 130px;
     aspect-ratio: 2 / 2.8; /* Esto asegura que el alto sea el doble que el ancho */
     object-fit: cover; /* Hace que la imagen cubra completamente el área sin distorsionarse */
   }

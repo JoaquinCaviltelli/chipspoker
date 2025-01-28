@@ -9,7 +9,7 @@ const pokerHands = [
   },
   { 
     name: "Escalera de Color", 
-    cards: ["9♣", "8♣", "7♣", "6♣", "5♣"], 
+    cards: ["9♥", "8♥", "7♥", "6♥", "5♥"], 
     highlighted: [0, 1, 2, 3, 4],
     description: "Cinco cartas consecutivas del mismo palo."
   },
@@ -27,7 +27,7 @@ const pokerHands = [
   },
   { 
     name: "Color", 
-    cards: ["A♠", "10♠", "7♠", "5♠", "3♠"], 
+    cards: ["A♦", "10♦", "7♦", "5♦", "3♦"], 
     highlighted: [0, 1, 2, 3, 4],
     description: "Cinco cartas del mismo palo, pero no en orden consecutivo."
   },
@@ -45,7 +45,7 @@ const pokerHands = [
   },
   { 
     name: "Doble Pareja", 
-    cards: ["9♠", "9♦", "6♠", "6♣", "2♠"], 
+    cards: ["9♠", "9♦", "6♥", "6♣", "2♠"], 
     highlighted: [0, 1, 2, 3],
     description: "Dos pares de cartas del mismo valor."
   },
@@ -66,19 +66,19 @@ const pokerHands = [
 // Función para asignar color a cada carta según el palo
 const getCardColor = (card) => {
   if (card.includes('♠') || card.includes('♣')) {
-    return 'text-black'; // Negro para Picas y Tréboles
+    return 'text-gray-800'; // Negro para Picas y Tréboles
   }
   if (card.includes('♥') || card.includes('♦')) {
-    return 'text-red-500'; // Rojo para Corazones y Diamantes
+    return 'text-red-700'; // Rojo para Corazones y Diamantes
   }
-  return 'text-black'; // Por defecto negro
+  return 'text-gray-800'; // Por defecto negro
 };
 
 const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
   return (
     isModalOpen && (
       <div className="fixed inset-0 bg-white overflow-scroll z-10">
-        <div className="rounded-lg w-full max-w-xl flex justify-between items-start h-full">
+        <div className="rounded-lg w-full max-w-3xl mx-auto flex justify-between items-start h-full">
           {/* <h2 className="font-bold mb-4">Manos de Póker</h2> */}
           <div className="space-y-2 p-6">
             {pokerHands.map((hand, index) => (
@@ -97,18 +97,18 @@ const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
                     return (
                       <div
                         key={idx}
-                        className={`w-9 h-12 bg-white border ${isHighlighted ? 'border-gray-800' : 'border-gray-400 opacity-50'} rounded flex justify-center items-center transition-all`}
+                        className={`w-9 h-12 bg-white border ${isHighlighted ? 'border-gray-400' : 'border-gray-400 opacity-50'} rounded flex flex-col items-center justify-center `}
                       >
-                        <div className="relative flex flex-col items-center justify-center">
+                        
                           {/* Número/letra en la esquina superior izquierda */}
-                          <span className={`text-[11px] font-medium ${getCardColor(card)} absolute top-0 left-0 transform -translate-x-[7px] -translate-y-2`}>
-                            {number}
-                          </span>
-                          {/* Símbolo centrado en la carta */}
-                          <span className={`text-lg ${getCardColor(card)}`}>
+                          <span className={`text-lg font-medium leading-4 ${getCardColor(card)} `}>
                             {suit}
                           </span>
-                        </div>
+                          {/* Símbolo centrado en la carta */}
+                          <span className={`text-lg leading-6 ${getCardColor(card)}`}>
+                            {number}
+                          </span>
+                        
                       </div>
                     );
                   })}
