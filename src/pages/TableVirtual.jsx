@@ -251,7 +251,51 @@ const TableVirtual = () => {
 
   return (
     <div className="max-w-3xl m-auto p-6">
-      <div className="flex justify-center space-x-2 mt-20 mb-2">
+      <div className="grid grid-cols-4 h-16 max-w-sm mx-auto">
+        <button
+          onClick={resetRound}
+          className="bg-[#985858] text-white px-6 py-2 rounded-md  flex justify-center items-center gap-2"
+        >
+          <span className="material-symbols-outlined">restart_alt</span>
+        </button>
+
+        <div className=" flex flex-col col-span-2 justify-center items-center">
+          <h2 className="text-xl text-gray-600 font-bold">
+            {["Preflop", "Flop", "Rivers", "Turn"][round] || ""}
+          </h2>
+          <h2 className="text-2xl text-gray-600 font-bold">
+            {roomData?.pot || 0}
+          </h2>
+        </div>
+        {round !== 4 && (
+          <button
+            onClick={nextRound}
+            className={`px-6 py-2 rounded-md text-white flex justify-center items-center gap-2 ${
+              round === 4 ? "bg-gray-400 cursor-not-allowed" : "bg-[#5B7661]"
+            }`}
+            disabled={round === 4}
+          >
+            <span className="material-symbols-outlined -rotate-90">
+              subscriptions
+            </span>
+          </button>
+        )}
+        {round === 4 &&  (
+          <button
+          disabled={roomData?.pot === 0}
+            onClick={handleDistributePot}
+            className={`px-6 py-2 rounded  text-white flex justify-center items-center gap-2 ${
+              roomData?.pot === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-[#5B7661]"
+            }`}
+          >
+            <span className="material-symbols-outlined">
+send_money
+</span>
+          </button>
+        )}
+      </div>
+
+      <div className="flex justify-center space-x-2 mt-10 mb-2">
         {getCardsToShow().map((card, index) => (
           <div key={index} className="card-container">
             <Carta isFlipped={card.isFlipped} round={round} />
@@ -260,45 +304,6 @@ const TableVirtual = () => {
       </div>
 
       {/* <div className="mt-6 flex justify-center space-x-4 mx-6"></div> */}
-
-      <div className="flex justify-center h-20 my-10">
-        <button
-          onClick={resetRound}
-          className="bg-[#985858] text-white px-6 py-2 rounded-md"
-        >
-          Reiniciar
-        </button>
-          
-        <div className="w-52 flex flex-col justify-center items-center">
-
-        <h2 className="text-xl text-gray-600 font-bold text-center">
-          {["Preflop", "Flop", "Rivers", "Turn"][round] || ""}
-        </h2>
-        <h2 className="text-2xl text-[#5B7661] font-bold text-center">
-          {roomData?.pot || 0}
-        </h2>
-        {round === 4 && roomData?.pot !== 0 && (
-          <button
-            onClick={handleDistributePot}
-            className="px-6 py-2 rounded  bg-[#5B7661] text-white"
-            >
-            Distribuir
-          </button>
-        )}
-        </div>
-
-        <button
-          onClick={nextRound}
-          className={`px-6 py-2 rounded-md ${
-            round === 4
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-[#5B7661] text-white"
-          }`}
-          disabled={round === 4}
-        >
-          Siguiente
-        </button>
-      </div>
 
       <div className="my-6">
         <ul className="flex justify-center flex-wrap items-center gap-6">
@@ -323,7 +328,7 @@ const TableVirtual = () => {
                   </span>
                 </div>
                 <div
-                  className={`flex flex-col justify-center items-center text-white w-36 h-16 rounded-lg text-lg ${
+                  className={`flex flex-col justify-center items-center text-white w-36 h-16 leading-3 rounded-lg  ${
                     selectedPlayers.includes(player.id)
                       ? "bg-[#5B7661]" // Resaltar con azul si está seleccionado
                       : player.id === currentTurn
@@ -333,9 +338,9 @@ const TableVirtual = () => {
                       : "bg-gray-700"
                   }`}
                 >
-                  <span>{player.name}</span>
+                  <span className="text-lg">{player.name}</span>
                   <div>
-                    <span className="text-sm">{player.balance}k</span>
+                    <span className="text-xs ">{player.balance}k</span>
                   </div>
                 </div>
                 <span className="text-xs text-gray-600 self-end pr-4 py-1">

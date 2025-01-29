@@ -12,6 +12,7 @@ const estiloFicha = {
   100: { color1: "#232429", color2: "#47474b" },
   500: { color1: "#8f3636", color2: "#c18585" },
   1000: { color1: "#e6c66a", color2: "#f1e0a3" },
+  5000: { color1: "#a9518d", color2: "#d18bb7" }
 };
 
 const Ficha = ({ denominacion, color1, color2 }) => (
@@ -67,7 +68,7 @@ const BetModal = ({
   currentBet,
   players,
   isPlayerFolded,
-  playerData
+  playerData,
 }) => {
   const { userData, updateBalance } = useContext(AuthContext); // Accede a userData y la función updateBalance
   const [selectedFiches, setSelectedFiches] = useState([]);
@@ -84,7 +85,7 @@ const BetModal = ({
         try {
           const userRef = doc(db, "users", user); // Obtén el documento de usuario usando su UID
           const userSnapshot = await getDoc(userRef); // Obtén el documento de Firestore
-  
+
           if (userSnapshot.exists()) {
             const userData = userSnapshot.data(); // Extrae los datos del documento
             setSimulatedBalance(userData.balance); // Establece el balance simulado con el valor obtenido
@@ -96,9 +97,8 @@ const BetModal = ({
         }
       }
     };
-  
+
     fetchBalance(); // Llama a la función para obtener el balance
-  
   }, [round]);
 
   // Función para manejar el doble toque en dispositivos móviles
@@ -142,7 +142,7 @@ const BetModal = ({
                 className="absolute"
                 style={{
                   bottom: `${index * 10}px`,
-                  left: `${index * 2 }px`,
+                  left: `${index * 2}px`,
                   transform: `rotate(${index * 2}deg)`,
                 }}
               >
@@ -160,7 +160,7 @@ const BetModal = ({
           className={`bg-white text-[#5B7661] px-4 py-2 rounded absolute bottom-2 left-2 flex`}
         >
           <span className="material-symbols-outlined font-bold text-xl">
-            backspace
+            close
           </span>
         </button>
         <div
@@ -172,8 +172,8 @@ const BetModal = ({
             {/* {simulatedBalance} */}
           </h2>
           <button className={`text-[#5B7661] rounded-md flex`}>
-            <span className="material-symbols-outlined font-semibold ">
-              publish
+            <span className="material-symbols-outlined font-semibold text-2xl">
+              input_circle
             </span>
           </button>
         </div>
@@ -200,13 +200,14 @@ const BetModal = ({
     onConfirmBet(); // Confirmar la apuesta
   };
 
-
-      
   return (
     <div className="w-full flex flex-col justify-between items-center h-full">
       <div className="flex w-full h-full mb-10 gap-2 flex-row-reverse ">
-        <Slide fold={fold} isPlayerFolded={isPlayerFolded}
-          currentTurn={currentTurn} user={user}
+        <Slide
+          fold={fold}
+          isPlayerFolded={isPlayerFolded}
+          currentTurn={currentTurn}
+          user={user}
           handleResetBet={handleResetBet}
           isActive={isActive}
           setIsActive={setIsActive}
@@ -222,20 +223,23 @@ const BetModal = ({
                 onTouchEnd={handleTouch} // Para dispositivos móviles
                 className="bg-radial-degradado text-white  h-full w-full mb-4 flex justify-center items-center flex-col cursor-pointer select-none rounded-md"
               >
-                <span className="material-symbols-outlined text-5xl">
+                <span className="material-symbols-outlined text-4xl">
                   touch_double
                 </span>
-                <span className=" font-medium text-xl">Paso</span>
+                <span className=" font-medium text-lg">Paso</span>
                 {/* <span className="text-gray-700 text-xs">(docle touch)</span> */}
-
               </div>
             ) : (
-              <div className={`h-full w-full mb-4 flex justify-center items-center rounded-md ${
-                isPlayerFolded ? "bg-degradado" : "bg-gray-200 "
-              }`}>
-                <span className={`material-symbols-outlined  text-5xl rotar ${
-                isPlayerFolded ? "text-white" : "text-gray-500"
-              }`}>
+              <div
+                className={`h-full w-full mb-4 flex justify-center items-center rounded-md ${
+                  isPlayerFolded ? "bg-degradado" : "bg-gray-200 "
+                }`}
+              >
+                <span
+                  className={`material-symbols-outlined  text-4xl rotar ${
+                    isPlayerFolded ? "text-white" : "text-gray-500"
+                  }`}
+                >
                   hourglass_top
                 </span>
               </div>
@@ -243,11 +247,9 @@ const BetModal = ({
           </>
         ) : (
           <div className="bg-radial-degradado rounded-md h-full w-full mb-4 select-none">
-  {/* Área donde se acumulan las fichas seleccionadas */}
-  {renderSelectedFiches()}
-</div>
-
-        
+            {/* Área donde se acumulan las fichas seleccionadas */}
+            {renderSelectedFiches()}
+          </div>
         )}
       </div>
 
@@ -255,7 +257,7 @@ const BetModal = ({
       <div className="flex flex-wrap justify-center gap-3 max-w-2xl m-auto mb-10">
         {[
           [10, 25, 50, 100], // Fichas para la primera fila (4 elementos)
-          [500, 1000], // Fichas para la segunda fila (2 elementos)
+          [500, 1000, 5000], // Fichas para la segunda fila (2 elementos)
         ].map((fila, index) => (
           <div key={index} className="flex w-full justify-center gap-2">
             {fila.map((valor) => (
@@ -265,7 +267,7 @@ const BetModal = ({
                 disabled={simulatedBalance < valor || currentTurn !== user} // Deshabilitar si no hay suficiente balance
                 className={`flex flex-col items-center justify-center ${
                   simulatedBalance < valor || currentTurn !== user
-                    ? "opacity-50 cursor-not-allowed"
+                    ? "opacity-30 cursor-not-allowed"
                     : ""
                 }`}
               >
@@ -278,7 +280,6 @@ const BetModal = ({
             ))}
           </div>
         ))}
-        
       </div>
 
       {/* Botones para resetear, confirmar y cerrar */}

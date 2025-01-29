@@ -4,15 +4,13 @@ import { AuthContext } from "../context/AuthContext";
 import { useRoom } from "../services/RoomService";
 import { collection, query, orderBy, getDocs, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import TransferModal from "/src/components/TransferModal.jsx"; // Importar el nuevo componente
 
 const Home = () => {
-  const { user, userData, loading, admin } = useContext(AuthContext);
+  const { user, userData, loading, admin, setUserData } = useContext(AuthContext);
   const { roomData, isUserInRoom } = useRoom();
   const navigate = useNavigate();
   const [ranking, setRanking] = useState([]);
-  const [selectedUserId, setSelectedUserId] = useState("");
-  const [transferAmount, setTransferAmount] = useState();
-  const [transferError, setTransferError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
 
   useEffect(() => {
@@ -27,6 +25,29 @@ const Home = () => {
       navigate("/game-room");
     }
   }, [user, userData, loading, navigate, isUserInRoom, admin]);
+
+  // Función para obtener el balance y actualizar userData
+  const fetchUserData = async () => {
+    if (user) {
+      try {
+        const userRef = doc(db, "users", user.uid); // Obtén el documento de usuario usando su UID
+        const userSnapshot = await getDoc(userRef); // Obtén el documento de Firestore
+
+        if (userSnapshot.exists()) {
+          const userDataFromDb = userSnapshot.data(); // Extrae los datos del documento
+          setUserData(userDataFromDb); // Actualiza el contexto con los nuevos datos
+        } else {
+          console.log("No se encontró el documento del usuario");
+        }
+      } catch (error) {
+        console.error("Error al obtener el balance desde Firestore:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, [user, userData]);
 
   useEffect(() => {
     const fetchRanking = async () => {
@@ -45,7 +66,7 @@ const Home = () => {
     };
 
     fetchRanking();
-  }, []);
+  }, [userData]);
 
   const joinRoom = async () => {
     try {
@@ -75,33 +96,17 @@ const Home = () => {
     }
   };
 
-  const handleTransfer = async (e) => {
-    e.preventDefault();
-    setTransferError("");
-
-    const recipient = ranking.find((user) => user.id === selectedUserId);
-    if (!recipient) {
-      setTransferError("Usuario no encontrado.");
-      return;
-    }
-
-    if (transferAmount <= 0 || transferAmount > userData.balance) {
-      setTransferError("Monto inválido.");
-      return;
-    }
+  const handleTransfer = async (recipientId, transferAmount) => {
+    const recipient = ranking.find((user) => user.id === recipientId);
+    if (!recipient) return;
 
     try {
       const userRef = doc(db, "users", user.uid);
-      const recipientRef = doc(db, "users", selectedUserId);
+      const recipientRef = doc(db, "users", recipientId);
 
       // Actualizar balances
       await updateDoc(userRef, { balance: userData.balance - transferAmount });
       await updateDoc(recipientRef, { balance: recipient.balance + transferAmount });
-
-      // Resetear campos
-      setSelectedUserId("");
-      setTransferAmount(0);
-      setIsModalOpen(false); // Cerrar el modal después de la transferencia
     } catch (error) {
       console.error("Error en la transferencia:", error);
     }
@@ -120,19 +125,15 @@ const Home = () => {
       {userData && (
         <div className="flex justify-between items-center gap-3 mb-8">
           <div className="flex gap-3">
-
-          <h1 className="text-5xl text-gray-600 font-semibold capitalize">{userData.name}</h1>
-          <span className="text-xl text-gray-600 font-bold">{userData.balance}</span>
+            <h1 className="text-5xl text-gray-600 font-semibold capitalize">{userData.name}</h1>
+            <span className="text-xl text-gray-600 font-bold">{userData.balance}</span>
           </div>
-      {/* Botón para abrir el modal */}
-      <button 
-        onClick={() => setIsModalOpen(true)} 
-        className="bg-[#7CA084]  text-white px-3 py-2 flex rounded"
-      >
-        <span className="material-symbols-outlined">
-sync_alt
-</span>
-      </button>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-[#7CA084] text-white px-3 py-2 flex rounded"
+          >
+            <span className="material-symbols-outlined">sync_alt</span>
+          </button>
         </div>
       )}
 
@@ -140,57 +141,13 @@ sync_alt
         Jugar
       </button>
 
-
-      {/* Modal */}
-      {/* Modal */}
-{isModalOpen && (
-  <div className="fixed inset-0 bg-white text-gray-600 overflow-scroll flex justify-center items-start z-50">
-    <div className="bg-white p-6  w-96">
-      <h2 className="text-xl text-gray-600 font-semibold mb-4">Transferir</h2>
-      <form onSubmit={handleTransfer}>
-        {/* Lista de jugadores */}
-        <div className="mb-4">
-          
-          <div className="grid  gap-2">
-            {ranking.map((user) => (
-              <button
-                key={user.id}
-                type="button"
-                onClick={() => setSelectedUserId(user.id)}
-                className={`border text-sm rounded p-2 w-full text-left ${selectedUserId === user.id ? 'bg-[#7CA084] text-white' : 'bg-white'}`}
-              >
-                {user.name}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <input
-          type="number"
-          placeholder="Monto"
-          value={transferAmount}
-          onChange={(e) => setTransferAmount(Number(e.target.value))}
-          className="border border-[#7CA084] text-[#7CA084] placeholder:text-[#7CA084] rounded p-2 mb-4 w-full mt-6 outline-none font-semibold"
-        />
-        {transferError && <p className="text-red-500">{transferError}</p>}
-        <button type="submit" className="bg-[#7CA084] w-full text-white px-4 py-2 rounded-md">
-          Transferir
-        </button>
-      </form>
-      <button
-        onClick={() => {
-          setIsModalOpen(false); // Cerrar el modal
-          setSelectedUserId(""); // Resetear la selección
-          setTransferAmount(); // Resetear el monto
-        }}
-        className="bg-gray-300 text-gray-700 w-full mt-4 py-2 rounded-md"
-      >
-        Cerrar
-      </button>
-    </div>
-  </div>
-)}
-
+      <TransferModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        ranking={ranking}
+        userData={userData}
+        handleTransfer={handleTransfer}
+      />
 
       <div className="w-full mt-8">
         <h2 className="text-xl text-gray-600 font-semibold mb-2">Ranking</h2>
@@ -201,9 +158,7 @@ sync_alt
                 <span className="w-8">{index + 1}</span>
                 <span className="flex items-center gap-2">
                   {user.name}
-                  {roomData?.players?.[user.id] && (
-                    <span className="w-2 h-2 rounded-full bg-[#7CA084]" />
-                  )}
+                  {roomData?.players?.[user.id] && <span className="w-2 h-2 rounded-full bg-[#7CA084]" />}
                 </span>
               </div>
               <span>{user.balance}</span>

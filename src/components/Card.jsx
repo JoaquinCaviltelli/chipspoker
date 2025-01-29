@@ -1,7 +1,6 @@
 
-import card from '/src/assets/cartaAs.png';
+import card from '/src/assets/suitsCard.png';
 import backCard from '/src/assets/boca_abajo.jpg';
-import end from '/src/assets/carta.jpg';
 
 export const Carta = ({ isFlipped, round }) => {
   return (
@@ -11,7 +10,7 @@ export const Carta = ({ isFlipped, round }) => {
       >
         {/* Cara frontal de la carta */}
         <div
-          className={`absolute w-full h-full backface-hidden bg-cover bg-center rounded-md border border-gray-400 ${round === 4 && "blur-[1px]"}`}
+          className={`absolute w-full h-full backface-hidden bg-cover bg-center rounded-md border border-gray-400 ${round === 4 && "blur-[2px] grayscale"}`}
           style={{
             backgroundImage: `url(${card})`,
           }}

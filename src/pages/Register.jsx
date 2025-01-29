@@ -48,8 +48,8 @@ const Register = () => {
               setName(e.target.value);
               setError(""); // Limpiar el error al escribir
             }}
-            className="w-full border-b outline-none text-5xl text-gray-500 font-semibold"
-            maxLength={8}
+            className="w-full border-b outline-none text-4xl text-gray-500 font-semibold"
+            maxLength={10}
           />
           {error && (
             <p className="text-red-500 text-sm mt-2">{error}</p>
