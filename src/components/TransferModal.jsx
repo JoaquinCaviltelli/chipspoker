@@ -95,8 +95,8 @@ const TransferModal = ({
           <h2 className="text-xl text-gray-600 font-semibold">
           Tranferir
           </h2>
-          <p className="text-sm text-gray-500 mb-4">
-                  Disponible: {userData.balance}
+          <p className="text-sm text-gray-500 mb-6">
+                  Disponible: {userData.balance}k
                 </p>
 
           <form onSubmit={handleFormSubmit}>
@@ -108,7 +108,7 @@ const TransferModal = ({
                       key={user.id}
                       type="button"
                       onClick={() => setSelectedUserId(user.id)}
-                      className={`border  text-sm rounded p-2 w-full text-left ${
+                      className={`border  rounded p-2 w-full text-left ${
                         selectedUserId === user.id
                           ? "bg-[#7CA084] text-white"
                           : "bg-white"
@@ -121,8 +121,10 @@ const TransferModal = ({
               </div>
             ) : (
               <div className="mb-4 text-gray-600">
-                <p className="text-lg font-semibold mb-2">
+                <p className="mb-2">
+                  Enviar a <b>
                   {selectedUser?.name}
+                    </b> 
                 </p>
                 
 
@@ -130,10 +132,10 @@ const TransferModal = ({
                   type="text"
                   value={transferAmount}
                   readOnly
-                  className="border border-[#7CA084] text-gray-600 placeholder:text-gray-600 rounded p-2 mb-4 w-full outline-none font-semibold text-center"
+                  className="border border-[#7CA084] text-gray-600 placeholder:text-gray-600 rounded p-2 mb-4 w-full outline-none text-lg font-medium text-center"
                 />
                 <div className="grid grid-cols-3 gap-2 mb-4">
-                  {["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"].map(
+                  {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map(
                     (number) => (
                       <button
                         key={number}
@@ -141,7 +143,7 @@ const TransferModal = ({
                         onClick={() =>
                           handleAmountChange(transferAmount + number)
                         }
-                        className="border border-[#7CA084] p-2 text-lg font-semibold rounded"
+                        className="border border-[#7CA084] p-2  rounded"
                       >
                         {number}
                       </button>
@@ -150,16 +152,24 @@ const TransferModal = ({
                   <button
                     type="button"
                     onClick={handleDeleteLastDigit}
-                    className="border border-[#7CA084] p-2 text-lg font-semibold rounded flex justify-center items-center"
+                    className="border border-[#7CA084] p-2 rounded flex justify-center items-center"
                   >
                    <span className="material-symbols-outlined text-lg">
 backspace
 </span>
+
                   </button>
+                  <button
+    type="button"
+    onClick={() => handleAmountChange(transferAmount + "0")}
+    className="border border-[#7CA084] p-2 rounded"
+  >
+    0
+  </button>
                   <button
                     type="button"
                     onClick={handleDeleteAll}
-                    className="border border-[#7CA084] p-2 text-lg font-semibold rounded"
+                    className="border border-[#7CA084] p-2 rounded"
                   >
                     c
                   </button>
@@ -172,7 +182,7 @@ backspace
             {step === 2 && (
               <button
                 type="submit"
-                className="bg-[#7CA084] w-full text-white px-4 py-2 rounded-md"
+                className="bg-[#7CA084] w-full text-white px-4 py-2 rounded-md font-medium"
               >
                 Transferir
               </button>
@@ -186,7 +196,7 @@ backspace
               setTransferAmount("");
               setStep(1); // Volver al paso 1
             }}
-            className="bg-gray-300 text-gray-700 w-full mt-4 py-2 rounded-md"
+            className="bg-white border border-[#7CA084] text-[#7CA084] w-full mt-4 py-2 rounded-md font-medium"
           >
             Cerrar
           </button>

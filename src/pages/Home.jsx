@@ -124,15 +124,15 @@ const Home = () => {
     <div className="m-6 max-w-md">
       {userData && (
         <div className="flex justify-between items-center gap-3 mb-8">
-          <div className="flex gap-3">
-            <h1 className="text-5xl text-gray-600 font-semibold capitalize">{userData.name}</h1>
-            <span className="text-xl text-gray-600 font-bold">{userData.balance}</span>
+          <div className="flex gap-2">
+            <h1 className="text-3xl text-gray-600 font-semibold capitalize">{userData.name}</h1>
+            <span className="text-sm text-gray-600 font-semibold">{userData.balance}</span>
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-[#7CA084] text-white px-3 py-2 flex rounded"
+            className="bg-[#7CA084] text-white px-3 py-1 flex rounded"
           >
-            <span className="material-symbols-outlined">sync_alt</span>
+            <span className="material-symbols-outlined text-xl">sync_alt</span>
           </button>
         </div>
       )}
@@ -153,8 +153,8 @@ const Home = () => {
         <h2 className="text-xl text-gray-600 font-semibold mb-2">Ranking</h2>
         <ul>
           {ranking.map((user, index) => (
-            <li key={user.id} className="flex items-center justify-between text-gray-600 font-semibold border-b py-2">
-              <div className="flex items-center">
+            <li key={user.id} className="flex items-center justify-between text-gray-600 font-semibold border-b py-2 text-sm">
+              <div className="flex items-center ">
                 <span className="w-8">{index + 1}</span>
                 <span className="flex items-center gap-2">
                   {user.name}
