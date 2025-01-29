@@ -196,7 +196,7 @@ backspace
               setTransferAmount("");
               setStep(1); // Volver al paso 1
             }}
-            className="bg-white border border-[#7CA084] text-[#7CA084] w-full mt-4 py-2 rounded-md font-medium"
+            className="bg-white border border-gray-600 text-gray-600 w-full mt-4 py-2 rounded-md font-medium"
           >
             Cerrar
           </button>

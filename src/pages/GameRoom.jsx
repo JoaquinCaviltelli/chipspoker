@@ -153,10 +153,10 @@ const [playerData, setPlayerData] = useState({});
           <span className="material-symbols-outlined rotate-180">logout</span>
         </button>
         <div className="flex gap-2 my-6 mx-3">
-          <h1 className="text-3xl text-gray-800 font-bold">
+          <h1 className="text-3xl text-gray-600 font-semibold capitalize">
             {playerData.name}
           </h1>
-          <span className="text-sm text-gray-800 font-bold">
+          <span className=" text-gray-600 font-semibold">
             {playerData.balance}
           </span>
           
