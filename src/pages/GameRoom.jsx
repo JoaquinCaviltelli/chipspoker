@@ -6,6 +6,7 @@ import { doc, getDoc, updateDoc, deleteField } from "firebase/firestore";
 import { db } from "../firebase";
 import BetModal from "/src/components/BetModal.jsx";
 import PokerHandsModal from "/src/components/PokerHandsModal.jsx"; // Importar el nuevo componente
+import Loader from '/src/components/Loader.jsx';
 
 const ROOM_ID = "default-room";
 
@@ -135,9 +136,7 @@ const [playerData, setPlayerData] = useState({});
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-lg">Cargando...</p>
-      </div>
+      <Loader />
     );
   }
 

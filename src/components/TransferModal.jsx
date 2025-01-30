@@ -91,7 +91,7 @@ const TransferModal = ({
   return (
     isModalOpen && (
       <div className="fixed inset-0 bg-white text-gray-600 overflow-scroll flex justify-center items-start z-50">
-        <div className="bg-white m-6 max-w-md w-full">
+        <div className="bg-white p-6 max-w-md w-full">
            
           <h2 className="text-xl text-gray-600 font-semibold">
           Tranferir

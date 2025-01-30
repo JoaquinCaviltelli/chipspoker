@@ -5,6 +5,7 @@ import { useRoom } from "../services/RoomService";
 import { collection, query, orderBy, getDocs, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import TransferModal from "/src/components/TransferModal.jsx"; // Importar el nuevo componente
+import Loader from '/src/components/Loader.jsx';
 
 const Home = () => {
   const { user, userData, loading, admin, setUserData } = useContext(AuthContext);
@@ -117,9 +118,7 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-lg">Cargando...</p>
-      </div>
+      <Loader />
     );
   }
 

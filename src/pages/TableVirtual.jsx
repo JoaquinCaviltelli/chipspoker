@@ -5,6 +5,7 @@ import { useRoom } from "../services/RoomService";
 import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import { Carta } from "/src/components/Card.jsx";
+import Loader from '/src/components/Loader.jsx';
 
 const TableVirtual = () => {
   const { user, userData, loading, admin } = useContext(AuthContext);
@@ -243,9 +244,7 @@ const TableVirtual = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-lg">Cargando...</p>
-      </div>
+      <Loader />
     );
   }
 
