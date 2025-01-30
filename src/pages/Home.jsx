@@ -59,7 +59,10 @@ const Home = () => {
           id: doc.id,
           ...doc.data(),
         }));
-        setRanking(users);
+
+        // Filtrar usuarios que no sean administradores
+        const filteredUsers = users.filter(user => !user.admin);
+        setRanking(filteredUsers);
       } catch (error) {
         console.error("Error al obtener el ranking:", error);
       }
@@ -153,7 +156,10 @@ const Home = () => {
         <h2 className="text-xl text-gray-600 font-semibold mb-2">Ranking</h2>
         <ul>
           {ranking.map((user, index) => (
-            <li key={user.id} className="flex items-center justify-between text-gray-600 font-semibold border-b py-2">
+            <li
+              key={user.id}
+              className={`flex items-center justify-between text-gray-600 font-semibold border-b py-2`}
+            >
               <div className="flex items-center ">
                 <span className="w-8">{index + 1}</span>
                 <span className="flex items-center gap-2">
