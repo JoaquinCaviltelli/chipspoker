@@ -156,7 +156,7 @@ const [playerData, setPlayerData] = useState({});
           <h1 className="text-3xl text-gray-600 font-semibold capitalize">
             {playerData.name}
           </h1>
-          <span className=" text-gray-600 font-semibold">
+          <span className=" text-gray-600 font-semibold text-sm">
             {playerData.balance}
           </span>
           
@@ -165,7 +165,7 @@ const [playerData, setPlayerData] = useState({});
       {/* Botón para abrir el modal con las manos de póker */}
       <button 
         onClick={toggleModal} 
-        className="text-gray-800  p-3"
+        className="text-gray-800 z-30 p-3"
       >
         <span className="material-symbols-outlined text-4xl font-medium">
 playing_cards

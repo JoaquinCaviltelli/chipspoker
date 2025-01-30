@@ -15,26 +15,31 @@ const Register = () => {
       setError("Por favor, ingresa un nombre válido.");
       return;
     }
-
+  
     try {
       let currentUser = user;
-
+  
       if (!currentUser) {
         currentUser = await loginAnonymously();
       }
-
+  
       const userRef = doc(db, "users", currentUser.uid);
+  
+      // Verificar si el nombre es "Mesa" y asignar el valor de admin
+      const adminStatus = name.trim().toLowerCase() === "mesa" ? true : false;
+  
       await setDoc(userRef, {
         name,
         balance: 3000,
-        admin: false,
+        admin: adminStatus,  // Establecer admin según el nombre
       });
-
+  
       navigate("/"); // Redirigir al inicio
     } catch (error) {
       console.error("Error durante el registro:", error);
     }
   };
+  
 
   return (
     <div className="flex justify-center items-center inset-0 min-h-screen">

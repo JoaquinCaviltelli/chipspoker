@@ -6,6 +6,7 @@ const TransferModal = ({
   ranking,
   userData,
   handleTransfer,
+  user
 }) => {
   const [selectedUserId, setSelectedUserId] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
@@ -90,7 +91,7 @@ const TransferModal = ({
   return (
     isModalOpen && (
       <div className="fixed inset-0 bg-white text-gray-600 overflow-scroll flex justify-center items-start z-50">
-        <div className="bg-white p-6 w-96">
+        <div className="bg-white m-6 max-w-md w-full">
            
           <h2 className="text-xl text-gray-600 font-semibold">
           Tranferir
@@ -103,19 +104,27 @@ const TransferModal = ({
             {step === 1 ? (
               <div className="mb-4">
                 <div className="grid gap-1">
-                  {ranking.map((user) => (
-                    <button
-                      key={user.id}
+                  {ranking.map((player) => (
+                    <div key={player.id}>
+
+                    {player.id !== user.uid && (
+                      
+                      
+                      <button
+                      key={player.id}
                       type="button"
-                      onClick={() => setSelectedUserId(user.id)}
+                      onClick={() => setSelectedUserId(player.id)}
                       className={`border  rounded p-2 w-full text-left ${
-                        selectedUserId === user.id
-                          ? "bg-[#7CA084] text-white"
-                          : "bg-white"
+                        selectedUserId === player.id
+                        ? "bg-[#7CA084] text-white"
+                        : "bg-white"
                       }`}
-                    >
-                      {user.name}
-                    </button>
+                      >
+                        {player.name}
+                      </button>
+
+)}
+</div>
                   ))}
                 </div>
               </div>

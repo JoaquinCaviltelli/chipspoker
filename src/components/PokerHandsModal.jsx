@@ -78,12 +78,12 @@ const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
   return (
     isModalOpen && (
       <div className="fixed inset-0 bg-white overflow-scroll z-10">
-        <div className="rounded-lg w-full max-w-3xl mx-auto flex justify-center items-start h-full">
+        <div className="rounded-lg w-full max-w-3xl mx-auto mt-4">
           {/* <h2 className="font-bold mb-4">Manos de Póker</h2> */}
           <div className="space-y-2 p-6">
             {pokerHands.map((hand, index) => (
               <div key={index}>
-                <h3 className="text-xs font-semibold mb-1">{hand.name}</h3>
+                <h3 className="text-sm font-semibold mb-1">{hand.name}</h3>
                 
                 <div className="flex gap-1">
                   {hand.cards.map((card, idx) => {
@@ -117,14 +117,7 @@ const PokerHandsModal = ({ isModalOpen, toggleModal }) => {
               </div>
             ))}
           </div>
-          <button
-            onClick={toggleModal}
-            className="py-7 px-4 absolute right-0"
-          >
-            <span className="material-symbols-outlined text-gray-800 font-bold">
-              close
-            </span>
-          </button>
+         
         </div>
       </div>
     )

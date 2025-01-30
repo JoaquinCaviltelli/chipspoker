@@ -124,7 +124,7 @@ const Home = () => {
   }
 
   return (
-    <div className="m-6 max-w-md">
+    <div className="p-6 max-w-md mx-auto">
       {userData && (
         <div className="flex justify-between items-center gap-3 mb-8">
           <div className="flex gap-2">
@@ -149,25 +149,26 @@ const Home = () => {
         setIsModalOpen={setIsModalOpen}
         ranking={ranking}
         userData={userData}
+        user={user}
         handleTransfer={handleTransfer}
       />
 
       <div className="w-full mt-8">
         <h2 className="text-xl text-gray-600 font-semibold mb-2">Ranking</h2>
         <ul>
-          {ranking.map((user, index) => (
+          {ranking.map((player, index) => (
             <li
-              key={user.id}
-              className={`flex items-center justify-between text-gray-600 font-semibold border-b py-2`}
+              key={player.id}
+              className={`flex items-center justify-between  border-b py-2 ${player.id === user.uid ? "text-[#7CA084] font-bold " : "text-gray-600 font-semibold "}`} 
             >
               <div className="flex items-center ">
                 <span className="w-8">{index + 1}</span>
                 <span className="flex items-center gap-2">
-                  {user.name}
-                  {roomData?.players?.[user.id] && <span className="w-2 h-2 rounded-full bg-[#7CA084]" />}
+                  {player.name}
+                  {roomData?.players?.[player.id] && <span className="w-2 h-2 rounded-full bg-[#7CA084]" />}
                 </span>
               </div>
-              <span>{user.balance}</span>
+              <span>{player.balance}</span>
             </li>
           ))}
         </ul>
