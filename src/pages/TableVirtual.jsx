@@ -260,7 +260,7 @@ const TableVirtual = () => {
 
         <div className=" flex flex-col col-span-2 justify-center items-center">
           <h2 className="text-xl text-gray-600 font-bold">
-            {["Preflop", "Flop", "Rivers", "Turn"][round] || ""}
+            {["Preflop", "Flop", "Turn", "Rivers", "Repartir" ][round] || ""}
           </h2>
           <h2 className="text-2xl text-gray-600 font-bold">
             {roomData?.pot || 0}

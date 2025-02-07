@@ -133,7 +133,9 @@ const BetModal = ({
     }, {});
 
     return (
-      <div className="flex justify-center relative gap-10 mb-4 h-full py-10 ">
+      <div className=" flex flex-col justify-center items-center h-full">
+
+      <div className="flex justify-center relative gap-10 mb-4 h-full" onClick={handleConfirmBet}>
         {Object.keys(fichesGrouped).map((value) => (
           <div key={value} className="relative -translate-x-6 scale-75">
             {fichesGrouped[value].map((_, index) => (
@@ -145,39 +147,37 @@ const BetModal = ({
                   left: `${index * 2}px`,
                   transform: `rotate(${index * 2}deg)`,
                 }}
-              >
+                >
                 <Ficha
                   denominacion={parseInt(value)}
                   color1={estiloFicha[value].color1}
                   color2={estiloFicha[value].color2}
-                />
+                  />
               </div>
             ))}
           </div>
         ))}
+        </div>
+        <div className="flex justify-between p-2 w-full">
+
         <button
           onClick={handleResetBet}
-          className={`bg-white text-[#5B7661] px-4 py-2 rounded absolute bottom-2 left-2 flex`}
-        >
+          className={`bg-white text-[#5B7661] px-4 py-2 rounded flex`}
+          >
           <span className="material-symbols-outlined font-bold text-xl">
-            close
+            backspace
           </span>
         </button>
         <div
-          onClick={handleConfirmBet}
-          className="absolute bottom-2 right-2 flex gap-3 justify-center items-center bg-white rounded px-4 py-2 cursor-pointer"
-        >
+        onClick={handleConfirmBet}
+          className=" flex gap-3 justify-center items-center bg-white rounded px-4 py-2 cursor-pointer"
+          >
           <h2 className="text-xl text-[#5B7661]  font-bold text-center">
             {currentBet}
-            {/* {simulatedBalance} */}
           </h2>
-          <button className={`text-[#5B7661] rounded-md flex`}>
-            <span className="material-symbols-outlined font-semibold text-2xl">
-              input_circle
-            </span>
-          </button>
-        </div>
+            </div>
       </div>
+          </div>
     );
   };
 
@@ -264,9 +264,9 @@ const BetModal = ({
               <button
                 key={valor}
                 onClick={() => handleAddBet(valor)}
-                disabled={simulatedBalance < valor || currentTurn !== user} // Deshabilitar si no hay suficiente balance
+                disabled={simulatedBalance < valor || currentTurn !== user || round === 4} // Deshabilitar si no hay suficiente balance
                 className={`flex flex-col items-center justify-center ${
-                  simulatedBalance < valor || currentTurn !== user
+                  simulatedBalance < valor || currentTurn !== user || round === 4
                     ? "opacity-30 cursor-not-allowed"
                     : ""
                 }`}

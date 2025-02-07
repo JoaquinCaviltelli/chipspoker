@@ -43,7 +43,7 @@ const Register = () => {
 
   return (
     <div className="flex justify-center items-center inset-0 min-h-screen">
-      <div className="p-8 w-full max-w-md">
+      <div className="p-8 w-full max-w-md -translate-y-28">
         <div>
           <label className="block text-gray-500 font-semibold">Nombre:</label>
           <input
