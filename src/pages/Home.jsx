@@ -27,7 +27,6 @@ const Home = () => {
     }
   }, [user, userData, loading, navigate, isUserInRoom, admin]);
 
-  // Función para obtener el balance y actualizar userData
   const fetchUserData = async () => {
     if (user) {
       try {
@@ -116,6 +115,20 @@ const Home = () => {
     }
   };
 
+  // Función para hacer admin
+  const handleMakeAdmin = async () => {
+    if (user) {
+      try {
+        const userRef = doc(db, "users", user.uid);
+        await updateDoc(userRef, { admin: true });
+        navigate(0);
+      } catch (error) {
+        console.error("Error al hacer administrador:", error);
+      }
+    }
+    
+  };
+
   if (loading) {
     return (
       <Loader />
@@ -141,6 +154,14 @@ const Home = () => {
 
       <button onClick={joinRoom} className="bg-[#7CA084] w-full text-white px-4 py-2 rounded-md font-medium">
         Jugar
+      </button>
+
+      {/* Botón para hacer administrador */}
+      <button
+        onClick={handleMakeAdmin}
+        className="bg-[#985858] w-full text-white px-4 py-2 rounded-md font-medium mt-4"
+      >
+        Mesa
       </button>
 
       <TransferModal

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { useRoom } from "../services/RoomService";
-import { doc, updateDoc, onSnapshot } from "firebase/firestore";
+import { doc, updateDoc, onSnapshot, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { Carta } from "/src/components/Card.jsx";
 import Loader from '/src/components/Loader.jsx';
@@ -242,6 +242,33 @@ const TableVirtual = () => {
     }
   };
 
+  const revokeAdmin = async () => {
+    if (user) {
+      try {
+        const userRef = doc(db, "users", user.uid); // Obtén el documento del usuario actual
+  
+        // Actualiza el campo "admin" a false
+        await updateDoc(userRef, { admin: false });
+        navigate("/");
+        navigate(0);
+      } catch (error) {
+        console.error("Error al revocar admin:", error);
+      }
+    }
+  };
+  
+
+  const deleteRoom = async () => {
+    try {
+      const roomRef = doc(db, "rooms", "default-room");
+      await deleteDoc(roomRef); // Elimina el documento de la sala
+      navigate("/"); // Redirige a la página principal después de eliminar la sala
+    } catch (error) {
+      console.error("Error al eliminar la sala:", error);
+    }
+  };
+  
+
   if (loading) {
     return (
       <Loader />
@@ -249,11 +276,34 @@ const TableVirtual = () => {
   }
 
   return (
-    <div className="max-w-3xl m-auto p-6">
-      <div className="grid grid-cols-4 h-16 max-w-sm mx-auto">
+    <div className="max-w-3xl m-auto">
+      <div className="w-full flex my-6 gap-3 items-center justify-between">
+
+       
+        <div className="flex gap-2">
+  <button
+          onClick={revokeAdmin}
+          className="bg-[#985858] text-white p-2 px-3 rounded-r flex items-center"
+          >
+          <span className="material-symbols-outlined rotate-180">logout</span>
+        </button>
+          <h1 className="text-3xl text-gray-600 font-semibold capitalize">
+            Mesa
+          </h1>
+          </div>
+          <button
+  onClick={deleteRoom}
+  className="bg-[#985858] text-white p-2 px-3 rounded-l flex items-center"
+>
+<span className="material-symbols-outlined">delete</span>
+</button>
+
+          
+    </div>
+      <div className="grid grid-cols-4 h-16 ">
         <button
           onClick={resetRound}
-          className="bg-[#985858] text-white px-6 py-2 rounded-md  flex justify-center items-center gap-2"
+          className="bg-[#985858] text-white px-6 py-2 rounded-r-md  flex justify-center items-center gap-2"
         >
           <span className="material-symbols-outlined">restart_alt</span>
         </button>
@@ -269,7 +319,7 @@ const TableVirtual = () => {
         {round !== 4 && (
           <button
             onClick={nextRound}
-            className={`px-6 py-2 rounded-md text-white flex justify-center items-center gap-2 ${
+            className={`px-6 py-2 rounded-l-md text-white flex justify-center items-center gap-2 ${
               round === 4 ? "bg-gray-400 cursor-not-allowed" : "bg-[#5B7661]"
             }`}
             disabled={round === 4}
@@ -283,7 +333,7 @@ const TableVirtual = () => {
           <button
           disabled={roomData?.pot === 0}
             onClick={handleDistributePot}
-            className={`px-6 py-2 rounded  text-white flex justify-center items-center gap-2 ${
+            className={`px-6 py-2 rounded-l-md  text-white flex justify-center items-center gap-2 ${
               roomData?.pot === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-[#5B7661]"
             }`}
           >
