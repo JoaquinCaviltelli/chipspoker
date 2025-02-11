@@ -86,23 +86,21 @@ const TransferModal = ({
     isModalOpen && (
       <div className="fixed inset-0 bg-white flex flex-col  items-end z-50 w-full">
         <div className="bg-white max-w-3xl p-6 w-full mx-auto flex flex-col ">
-        <button
-          onClick={() => {
-            setIsModalOpen(false);
-            setSelectedUserId("");
-            setTransferAmount("");
-            setStep(1); // Volver al paso 1
-          }} // Cerrar el modal
-          className="bg-[#5B7661] text-white p-2 rounded flex items-center justify-center self-end mb-6"
-        >
-          <span className="material-symbols-outlined">chevron_backward</span>
-        </button>
-        <div className=" text-gray-700  flex gap-2  w-full  items-center text-left mb-6">
-
-           <span className="material-symbols-outlined text-3xl">mintmark</span> 
-            <p className="font-medium leading-4">Agregar
-            fichas</p>
-        </div>
+          <button
+            onClick={() => {
+              setIsModalOpen(false);
+              setSelectedUserId("");
+              setTransferAmount("");
+              setStep(1); // Volver al paso 1
+            }} // Cerrar el modal
+            className="bg-[#5B7661] text-white p-2 rounded flex items-center justify-center self-end mb-6"
+          >
+            <span className="material-symbols-outlined">chevron_backward</span>
+          </button>
+          <div className=" text-gray-700  flex gap-2  w-full  items-center text-left mb-6">
+            <span className="material-symbols-outlined text-3xl">mintmark</span>
+            <p className="font-medium leading-4">Agregar fichas</p>
+          </div>
 
           <form onSubmit={handleFormSubmit}>
             {step === 1 ? (
@@ -124,9 +122,12 @@ const TransferModal = ({
                           className=" text-gray-700 p-3 flex gap-3  items-center w-full  h-16  shadow-lg rounded-md border  text-left mb-3 "
                         >
                           <span className="material-symbols-outlined">
-person
-</span>
-                          {player.name}
+                            person
+                          </span>
+                          <div className="flex justify-between w-full items-center">
+                            <span className="font-medium">{player.name}</span>
+                            <span className="text-sm">{player.balance}k</span>
+                          </div>
                         </button>
                       )}
                     </div>
@@ -136,7 +137,8 @@ person
             ) : (
               <div className="mb-4 text-gray-600">
                 <p className="mb-2">
-                  Enviar a <b>{selectedUser?.name}</b> (Total: {selectedUser?.balance}k)
+                  Enviar a <b>{selectedUser?.name}</b> (Total:{" "}
+                  {selectedUser?.balance}k)
                 </p>
 
                 <input

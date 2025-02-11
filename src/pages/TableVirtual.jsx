@@ -102,7 +102,6 @@ const TableVirtual = () => {
 
   const nextRound = async () => {
     try {
-      console.log(players);
       const updatedPlayers = players.map((player) => ({
         ...player,
         status: player.status === "folded" ? "folded" : "none",
@@ -320,6 +319,7 @@ const TableVirtual = () => {
         />
       </div>
       <div className="grid grid-cols-4  w-full mx-auto">
+        
         <button
           onClick={resetRound}
           className="bg-[#985858] text-white px-6 py-2 rounded-md  flex justify-center items-center gap-2"
