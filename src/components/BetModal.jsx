@@ -200,6 +200,9 @@ const BetModal = ({
     onConfirmBet(); // Confirmar la apuesta
   };
 
+  const currentPlayer = players.find(player => player.id === currentTurn);
+  const currentPlayerName = currentPlayer ? currentPlayer.name : 'Cargando...';
+
   return (
     <div className="w-full flex flex-col justify-between items-center h-full">
       <div className="flex w-full h-full mb-10 gap-2 flex-row-reverse ">
@@ -231,7 +234,7 @@ const BetModal = ({
               </div>
             ) : (
               <div
-                className={`h-full w-full mb-4 flex justify-center items-center rounded-md ${
+                className={`h-full w-full mb-4 flex flex-col gap-3 justify-center items-center rounded-md ${
                   isPlayerFolded ? "bg-degradado" : "bg-gray-200 "
                 }`}
               >
@@ -242,6 +245,12 @@ const BetModal = ({
                 >
                   hourglass_top
                 </span>
+                <p className="text-gray-500 normal-case">
+                   esperando a <b>
+                   {currentPlayerName}
+                    </b>
+
+                </p>
               </div>
             )}
           </>

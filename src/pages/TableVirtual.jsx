@@ -102,6 +102,7 @@ const TableVirtual = () => {
 
   const nextRound = async () => {
     try {
+      console.log(players);
       const updatedPlayers = players.map((player) => ({
         ...player,
         status: player.status === "folded" ? "folded" : "none",
@@ -151,9 +152,9 @@ const TableVirtual = () => {
   const getAction = (player) => {
     switch (player.status) {
       case "passed":
-        return player.bet ? `${player.bet}` : "Paso";
+        return player.bet ? `${player.bet}k` : "Paso";
       case "bet":
-        return `${player.bet}`;
+        return `${player.bet}k`;
       case "folded":
         return "Me voy";
       default:
@@ -293,7 +294,7 @@ const TableVirtual = () => {
 
   return (
     <div className="max-w-3xl p-6 m-auto">
-      <div className="w-full max-w-md mx-auto flex mb-6 items-center justify-end">
+      <div className="w-full max-full mx-auto flex mb-6 items-center justify-end">
         <button
           onClick={() => setIsAdminModalOpen(true)}
           className="bg-[#5B7661] text-white p-2  rounded flex items-center"
@@ -318,7 +319,7 @@ const TableVirtual = () => {
           handleTransfer={handleTransfer}
         />
       </div>
-      <div className="grid grid-cols-4 h-16 max-w-md mx-auto">
+      <div className="grid grid-cols-4  w-full mx-auto">
         <button
           onClick={resetRound}
           className="bg-[#985858] text-white px-6 py-2 rounded-md  flex justify-center items-center gap-2"
@@ -331,7 +332,7 @@ const TableVirtual = () => {
             {["Preflop", "Flop", "Turn", "Rivers", "Repartir"][round] || ""}
           </h2>
           <h2 className="text-2xl text-gray-600 font-bold">
-            {roomData?.pot || 0}
+            {roomData?.pot || 0}k
           </h2>
         </div>
         {round !== 4 && (
@@ -347,12 +348,12 @@ const TableVirtual = () => {
         )}
         {round === 4 && (
           <button
-            disabled={roomData?.pot === 0}
+            disabled={roomData?.pot === 0}k
             onClick={handleDistributePot}
             className={`px-6 py-2 rounded-md  text-white flex justify-center items-center gap-2 ${
               roomData?.pot === 0
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-[#5B7661]"
+                : "bg-gray-800"
             }`}
           >
             <span className="material-symbols-outlined">send_money</span>
@@ -360,9 +361,9 @@ const TableVirtual = () => {
         )}
       </div>
 
-      <div className="flex justify-center space-x-2 mt-10 mb-2">
+      <div className="flex justify-between my-10 gap-3">
         {getCardsToShow().map((card, index) => (
-          <div key={index} className="card-container">
+          <div key={index} className="card-container w-full">
             <Carta isFlipped={card.isFlipped} round={round} />
           </div>
         ))}
@@ -408,8 +409,8 @@ const TableVirtual = () => {
                     <span className="text-xs ">{player.balance}k</span>
                   </div>
                 </div>
-                <span className="text-xs text-gray-600 self-end pr-4 py-1">
-                  {player.totalBetInRound}{" "}
+                <span className="text-xs text-gray-600 self-end pr-3 py-1">
+                  Total: {player.totalBetInRound}k
                 </span>
               </li>
             );

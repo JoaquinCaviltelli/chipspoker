@@ -85,7 +85,7 @@ const TransferModal = ({
   return (
     isModalOpen && (
       <div className="fixed inset-0 bg-white flex flex-col  items-end z-50 w-full">
-        <div className="bg-white max-w-md w-full my-6 mx-auto flex flex-col ">
+        <div className="bg-white max-w-3xl p-6 w-full mx-auto flex flex-col ">
         <button
           onClick={() => {
             setIsModalOpen(false);

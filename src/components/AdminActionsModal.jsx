@@ -10,8 +10,8 @@ const AdminActionsModal = ({
   if (!isModalOpen) return null; // Si el modal está cerrado, no renderizar
 
   return (
-    <div className="fixed inset-0 bg-white flex flex-col items-end p-6 z-50 w-full">
-      <div className="w-full max-w-md mx-auto flex flex-col justify-end items-end">
+    <div className="fixed inset-0 bg-white flex flex-col items-end  z-50 w-full">
+      <div className="w-full max-w-3xl mx-auto flex flex-col justify-end items-end p-6">
       <button
         onClick={() => setIsAdminModalOpen(false)} // Cerrar el modal
         className="bg-[#5B7661] text-white p-2 rounded flex items-center justify-center mb-6"
