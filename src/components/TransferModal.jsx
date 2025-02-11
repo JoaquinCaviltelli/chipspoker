@@ -84,7 +84,8 @@ const TransferModal = ({
 
   return (
     isModalOpen && (
-      <div className="fixed inset-0 bg-white flex flex-col py-6 items-end z-50 max-w-md mx-auto">
+      <div className="fixed inset-0 bg-white flex flex-col  items-end z-50 w-full">
+        <div className="bg-white max-w-md w-full my-6 mx-auto flex flex-col ">
         <button
           onClick={() => {
             setIsModalOpen(false);
@@ -92,24 +93,23 @@ const TransferModal = ({
             setTransferAmount("");
             setStep(1); // Volver al paso 1
           }} // Cerrar el modal
-          className="bg-gray-800 text-white p-2 rounded flex items-center justify-center self-end"
+          className="bg-[#5B7661] text-white p-2 rounded flex items-center justify-center self-end mb-6"
         >
-          
-          <span className="material-symbols-outlined">
-chevron_backward
-</span>
+          <span className="material-symbols-outlined">chevron_backward</span>
         </button>
-        <div className="bg-white max-w-md w-full my-6">
-          <h2 className="text-xl text-gray-800 font-semibold ">
-            Selecciona Jugador
-          </h2>
+        <div className=" text-gray-700  flex gap-2  w-full  items-center text-left mb-6">
+
+           <span className="material-symbols-outlined text-3xl">mintmark</span> 
+            <p className="font-medium leading-4">Agregar
+            fichas</p>
+        </div>
 
           <form onSubmit={handleFormSubmit}>
             {step === 1 ? (
               <div className="mb-4">
                 <div className="grid gap-1">
                   {ranking.length === 0 && (
-                    <p className="text-gray-500 w-full text-left mt-3">
+                    <p className="text-gray-500 w-full text-left">
                       no hay jugadores en la sala
                     </p>
                   )}
@@ -121,12 +121,11 @@ chevron_backward
                           key={player.id}
                           type="button"
                           onClick={() => setSelectedUserId(player.id)}
-                          className={` border  rounded p-2 w-full text-left mt-6 ${
-                            selectedUserId === player.id
-                              ? "bg-[#7CA084] text-white"
-                              : "bg-white"
-                          }`}
+                          className=" text-gray-700 p-3 flex gap-3  items-center w-full  h-16  shadow-lg rounded-md border  text-left mb-3 "
                         >
+                          <span className="material-symbols-outlined">
+person
+</span>
                           {player.name}
                         </button>
                       )}
@@ -137,7 +136,7 @@ chevron_backward
             ) : (
               <div className="mb-4 text-gray-600">
                 <p className="mb-2">
-                  Enviar a <b>{selectedUser?.name}</b>
+                  Enviar a <b>{selectedUser?.name}</b> (Total: {selectedUser?.balance}k)
                 </p>
 
                 <input
@@ -199,7 +198,6 @@ chevron_backward
               </button>
             )}
           </form>
-
         </div>
       </div>
     )

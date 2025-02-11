@@ -9,7 +9,6 @@ import Loader from "/src/components/Loader.jsx";
 import TransferModal from "/src/components/TransferModal.jsx";
 import AdminActionsModal from "/src/components/AdminActionsModal.jsx";
 
-
 const TableVirtual = () => {
   const { user, userData, loading, admin } = useContext(AuthContext);
   const { roomData } = useRoom();
@@ -97,7 +96,7 @@ const TableVirtual = () => {
       setRound(0);
       setCurrentTurn(updatedPlayers[0].id);
     } catch (error) {
-     alert("No hay jugadores en la sala");
+      alert("No hay jugadores en la sala");
     }
   };
 
@@ -127,7 +126,6 @@ const TableVirtual = () => {
       setRound(round + 1);
       setCurrentTurn(firstPlayer.id);
     } catch (error) {
-
       alert("No hay jugadores en la sala");
     }
   };
@@ -296,19 +294,12 @@ const TableVirtual = () => {
   return (
     <div className="max-w-3xl p-6 m-auto">
       <div className="w-full max-w-md mx-auto flex mb-6 items-center justify-end">
-        
-        
-
-      
-
         <button
           onClick={() => setIsAdminModalOpen(true)}
-          className="bg-gray-800 text-white p-2  rounded flex items-center"
-          >
+          className="bg-[#5B7661] text-white p-2  rounded flex items-center"
+        >
           <span className="material-symbols-outlined">menu</span>
         </button>
-
-        
 
         <AdminActionsModal
           isModalOpen={isAdminModalOpen}
@@ -317,7 +308,6 @@ const TableVirtual = () => {
           revokeAdmin={revokeAdmin}
           deleteRoom={deleteRoom}
         />
-       
 
         <TransferModal
           isModalOpen={isModalOpen}
@@ -348,13 +338,11 @@ const TableVirtual = () => {
           <button
             onClick={nextRound}
             className={`px-6 py-2 rounded-md text-white flex justify-center items-center gap-2 ${
-              round === 4 ? "bg-gray-400 cursor-not-allowed" : "bg-[#5B7661]"
+              round === 4 ? "bg-gray-400 cursor-not-allowed" : "bg-gray-800"
             }`}
             disabled={round === 4}
           >
-            <span className="material-symbols-outlined">
-            skip_next
-            </span>
+            <span className="material-symbols-outlined">skip_next</span>
           </button>
         )}
         {round === 4 && (
