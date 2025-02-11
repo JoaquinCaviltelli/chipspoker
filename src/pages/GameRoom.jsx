@@ -6,7 +6,7 @@ import { doc, getDoc, updateDoc, deleteField } from "firebase/firestore";
 import { db } from "../firebase";
 import BetModal from "/src/components/BetModal.jsx";
 import PokerHandsModal from "/src/components/PokerHandsModal.jsx"; // Importar el nuevo componente
-import Loader from '/src/components/Loader.jsx';
+import Loader from "/src/components/Loader.jsx";
 
 const ROOM_ID = "default-room";
 
@@ -19,27 +19,27 @@ const GameRoom = () => {
   const [currentTurn, setCurrentTurn] = useState(null);
   const [currentBet, setCurrentBet] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para abrir/cerrar el modal
-const [playerData, setPlayerData] = useState({});
+  const [playerData, setPlayerData] = useState({});
 
   const roomRef = doc(db, "rooms", ROOM_ID);
 
-   useEffect(() => {
-      if (loading || !user || !userData || !isUserInRoom(user.uid)) return;
-  
-      // Actualizar el estado del jugador cuando cambian los datos en Firestore
-      if (roomData && roomData.players[user.uid]) {
-        const playerInRoom = roomData.players[user.uid];
-        setPlayerData(prevState => ({
-          ...prevState,
-          name: playerInRoom.name,
-          balance: playerInRoom.balance,
-          bet: playerInRoom.bet,
-          totalBetInRound: playerInRoom.totalBetInRound,
-          order: playerInRoom.order,
-          status: playerInRoom.status,
-        }));
-      }
-    }, [loading, user, userData, players, roomData, isUserInRoom]);
+  useEffect(() => {
+    if (loading || !user || !userData || !isUserInRoom(user.uid)) return;
+
+    // Actualizar el estado del jugador cuando cambian los datos en Firestore
+    if (roomData && roomData.players[user.uid]) {
+      const playerInRoom = roomData.players[user.uid];
+      setPlayerData((prevState) => ({
+        ...prevState,
+        name: playerInRoom.name,
+        balance: playerInRoom.balance,
+        bet: playerInRoom.bet,
+        totalBetInRound: playerInRoom.totalBetInRound,
+        order: playerInRoom.order,
+        status: playerInRoom.status,
+      }));
+    }
+  }, [loading, user, userData, players, roomData, isUserInRoom]);
 
   const fetchGameData = useCallback(async () => {
     try {
@@ -70,10 +70,13 @@ const [playerData, setPlayerData] = useState({});
     (player) => player.id === user.uid && player.status === "folded"
   );
 
-  const isPlayerTurn = currentTurn === user.uid && !isPlayerFolded && round !== 4;
+  const isPlayerTurn =
+    currentTurn === user.uid && !isPlayerFolded && round !== 4;
 
   const getNextTurn = () => {
-    const activePlayers = players.filter((player) => player.status !== "folded");
+    const activePlayers = players.filter(
+      (player) => player.status !== "folded"
+    );
     const currentIndex = activePlayers.findIndex((p) => p.id === currentTurn);
     return activePlayers[(currentIndex + 1) % activePlayers.length]?.id;
   };
@@ -106,7 +109,7 @@ const [playerData, setPlayerData] = useState({});
         pot: currentPot + amount,
       });
       handlePlayerAction("bet");
-      setCurrentBet(0)
+      setCurrentBet(0);
     } catch (error) {
       console.error("Error al realizar la apuesta:", error);
     }
@@ -135,49 +138,38 @@ const [playerData, setPlayerData] = useState({});
   };
 
   if (loading) {
-    return (
-      <Loader />
-    );
+    return <Loader />;
   }
 
   return (
     <div className="fixed inset-0 flex flex-col justify-center max-w-3xl mx-auto">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-
-        <button
-          onClick={leaveRoom}
-          className="bg-[#985858] text-white p-2 px-3 rounded-r flex items-center"
+          <button
+            onClick={leaveRoom}
+            className="bg-[#985858] text-white p-2 px-3 rounded-r flex items-center"
           >
-          <span className="material-symbols-outlined rotate-180">logout</span>
-        </button>
-        <div className="flex gap-2 my-6 mx-3">
-          <h1 className="text-3xl text-gray-600 font-semibold capitalize">
-            {playerData.name}
-          </h1>
-          <span className=" text-gray-600 font-semibold text-sm">
-            {playerData.balance}
-          </span>
-          
-        </div>
+            <span className="material-symbols-outlined rotate-180">logout</span>
+          </button>
+          <div className="flex gap-2 my-6 mx-3">
+            <h1 className="text-3xl text-gray-600 font-semibold capitalize">
+              {playerData.name}
+            </h1>
+            <span className=" text-gray-600 font-semibold text-sm">
+              {playerData.balance}
+            </span>
           </div>
-      {/* Botón para abrir el modal con las manos de póker */}
-      <button 
-        onClick={toggleModal} 
-        className="text-gray-800 z-30 p-3"
-      >
-        <span className="material-symbols-outlined text-4xl font-medium">
-playing_cards
-</span>
-      </button>
+        </div>
+        {/* Botón para abrir el modal con las manos de póker */}
+        <button onClick={toggleModal} className="text-gray-800 z-30 p-3">
+          <span className="material-symbols-outlined text-4xl font-medium">
+            playing_cards
+          </span>
+        </button>
       </div>
 
-
       {/* Modal con las manos de póker */}
-      <PokerHandsModal 
-        isModalOpen={isModalOpen} 
-        toggleModal={toggleModal}
-      />
+      <PokerHandsModal isModalOpen={isModalOpen} toggleModal={toggleModal} />
 
       <BetModal
         isPlayerFolded={isPlayerFolded}

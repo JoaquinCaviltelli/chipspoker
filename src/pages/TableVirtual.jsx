@@ -5,7 +5,10 @@ import { useRoom } from "../services/RoomService";
 import { doc, updateDoc, onSnapshot, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { Carta } from "/src/components/Card.jsx";
-import Loader from '/src/components/Loader.jsx';
+import Loader from "/src/components/Loader.jsx";
+import TransferModal from "/src/components/TransferModal.jsx";
+import AdminActionsModal from "/src/components/AdminActionsModal.jsx";
+
 
 const TableVirtual = () => {
   const { user, userData, loading, admin } = useContext(AuthContext);
@@ -14,6 +17,8 @@ const TableVirtual = () => {
   const [round, setRound] = useState(0);
   const [currentTurn, setCurrentTurn] = useState(null);
   const [selectedPlayers, setSelectedPlayers] = useState([]); // Estado para jugadores seleccionados
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
 
   // Memoize players for better performance and automatic sorting
   const players = useMemo(() => {
@@ -62,7 +67,7 @@ const TableVirtual = () => {
       const roomRef = doc(db, "rooms", "default-room");
       await updateDoc(roomRef, updates);
     } catch (error) {
-      console.error("Error al actualizar estado en Firestore:", error);
+      alert("No hay jugadores en la sala");
     }
   };
 
@@ -92,7 +97,7 @@ const TableVirtual = () => {
       setRound(0);
       setCurrentTurn(updatedPlayers[0].id);
     } catch (error) {
-      console.error("Error al reiniciar la ronda:", error);
+     alert("No hay jugadores en la sala");
     }
   };
 
@@ -122,7 +127,8 @@ const TableVirtual = () => {
       setRound(round + 1);
       setCurrentTurn(firstPlayer.id);
     } catch (error) {
-      console.error("Error al avanzar a la siguiente ronda:", error);
+
+      alert("No hay jugadores en la sala");
     }
   };
 
@@ -246,7 +252,7 @@ const TableVirtual = () => {
     if (user) {
       try {
         const userRef = doc(db, "users", user.uid); // Obtén el documento del usuario actual
-  
+
         // Actualiza el campo "admin" a false
         await updateDoc(userRef, { admin: false });
         navigate("/");
@@ -256,7 +262,6 @@ const TableVirtual = () => {
       }
     }
   };
-  
 
   const deleteRoom = async () => {
     try {
@@ -267,50 +272,73 @@ const TableVirtual = () => {
       console.error("Error al eliminar la sala:", error);
     }
   };
-  
+
+  const handleTransfer = async (recipientId, transferAmount) => {
+    const recipient = players.find((player) => player.id === recipientId);
+    if (!recipient) return;
+
+    try {
+      const recipientRef = doc(db, "users", recipientId);
+
+      // Solo actualiza el balance del destinatario (sin afectar al usuario actual)
+      await updateDoc(recipientRef, {
+        balance: recipient.balance + transferAmount,
+      });
+    } catch (error) {
+      console.error("Error en la transferencia:", error);
+    }
+  };
 
   if (loading) {
-    return (
-      <Loader />
-    );
+    return <Loader />;
   }
 
   return (
-    <div className="max-w-3xl m-auto">
-      <div className="w-full flex my-6 gap-3 items-center justify-between">
+    <div className="max-w-3xl p-6 m-auto">
+      <div className="w-full max-w-md mx-auto flex mb-6 items-center justify-end">
+        
+        
 
-       
-        <div className="flex gap-2">
-  <button
-          onClick={revokeAdmin}
-          className="bg-[#985858] text-white p-2 px-3 rounded-r flex items-center"
+      
+
+        <button
+          onClick={() => setIsAdminModalOpen(true)}
+          className="bg-gray-800 text-white p-2  rounded flex items-center"
           >
-          <span className="material-symbols-outlined rotate-180">logout</span>
+          <span className="material-symbols-outlined">menu</span>
         </button>
-          <h1 className="text-3xl text-gray-600 font-semibold capitalize">
-            Mesa
-          </h1>
-          </div>
-          <button
-  onClick={deleteRoom}
-  className="bg-[#985858] text-white p-2 px-3 rounded-l flex items-center"
->
-<span className="material-symbols-outlined">delete</span>
-</button>
 
-          
-    </div>
-      <div className="grid grid-cols-4 h-16 ">
+        
+
+        <AdminActionsModal
+          isModalOpen={isAdminModalOpen}
+          setIsAdminModalOpen={setIsAdminModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          revokeAdmin={revokeAdmin}
+          deleteRoom={deleteRoom}
+        />
+       
+
+        <TransferModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          ranking={players} // Pasar los jugadores como ranking
+          userData={userData}
+          user={user}
+          handleTransfer={handleTransfer}
+        />
+      </div>
+      <div className="grid grid-cols-4 h-16 max-w-md mx-auto">
         <button
           onClick={resetRound}
-          className="bg-[#985858] text-white px-6 py-2 rounded-r-md  flex justify-center items-center gap-2"
+          className="bg-[#985858] text-white px-6 py-2 rounded-md  flex justify-center items-center gap-2"
         >
           <span className="material-symbols-outlined">restart_alt</span>
         </button>
 
         <div className=" flex flex-col col-span-2 justify-center items-center">
           <h2 className="text-xl text-gray-600 font-bold">
-            {["Preflop", "Flop", "Turn", "Rivers", "Repartir" ][round] || ""}
+            {["Preflop", "Flop", "Turn", "Rivers", "Repartir"][round] || ""}
           </h2>
           <h2 className="text-2xl text-gray-600 font-bold">
             {roomData?.pot || 0}
@@ -319,27 +347,27 @@ const TableVirtual = () => {
         {round !== 4 && (
           <button
             onClick={nextRound}
-            className={`px-6 py-2 rounded-l-md text-white flex justify-center items-center gap-2 ${
+            className={`px-6 py-2 rounded-md text-white flex justify-center items-center gap-2 ${
               round === 4 ? "bg-gray-400 cursor-not-allowed" : "bg-[#5B7661]"
             }`}
             disabled={round === 4}
           >
-            <span className="material-symbols-outlined -rotate-90">
-              subscriptions
+            <span className="material-symbols-outlined">
+            skip_next
             </span>
           </button>
         )}
-        {round === 4 &&  (
+        {round === 4 && (
           <button
-          disabled={roomData?.pot === 0}
+            disabled={roomData?.pot === 0}
             onClick={handleDistributePot}
-            className={`px-6 py-2 rounded-l-md  text-white flex justify-center items-center gap-2 ${
-              roomData?.pot === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-[#5B7661]"
+            className={`px-6 py-2 rounded-md  text-white flex justify-center items-center gap-2 ${
+              roomData?.pot === 0
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#5B7661]"
             }`}
           >
-            <span className="material-symbols-outlined">
-send_money
-</span>
+            <span className="material-symbols-outlined">send_money</span>
           </button>
         )}
       </div>

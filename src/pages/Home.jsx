@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useRoom } from "../services/RoomService";
 import { collection, query, orderBy, getDocs, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import TransferModal from "/src/components/TransferModal.jsx"; // Importar el nuevo componente
+
 import Loader from '/src/components/Loader.jsx';
 
 const Home = () => {
@@ -12,8 +12,7 @@ const Home = () => {
   const { roomData, isUserInRoom } = useRoom();
   const navigate = useNavigate();
   const [ranking, setRanking] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
-
+ 
   useEffect(() => {
     if (admin) {
       navigate("/table-virtual");
@@ -99,21 +98,7 @@ const Home = () => {
     }
   };
 
-  const handleTransfer = async (recipientId, transferAmount) => {
-    const recipient = ranking.find((user) => user.id === recipientId);
-    if (!recipient) return;
 
-    try {
-      const userRef = doc(db, "users", user.uid);
-      const recipientRef = doc(db, "users", recipientId);
-
-      // Actualizar balances
-      await updateDoc(userRef, { balance: userData.balance - transferAmount });
-      await updateDoc(recipientRef, { balance: recipient.balance + transferAmount });
-    } catch (error) {
-      console.error("Error en la transferencia:", error);
-    }
-  };
 
   // Función para hacer admin
   const handleMakeAdmin = async () => {
@@ -136,42 +121,33 @@ const Home = () => {
   }
 
   return (
-    <div className="p-6 max-w-md mx-auto">
+    <div className="p-6 max-w-3xl mx-auto">
       {userData && (
-        <div className="flex justify-between items-center gap-3 mb-8">
-          <div className="flex gap-2">
+        <div className="flex justify-start items-center gap-3 mb-8">
+         
             <h1 className="text-4xl text-gray-600 font-semibold capitalize">{userData.name}</h1>
             <span className=" text-gray-600 font-semibold">{userData.balance}</span>
-          </div>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-[#7CA084] text-white px-2 py-1 flex rounded"
-          >
-            <span className="material-symbols-outlined text-2xl">sync_alt</span>
-          </button>
+         
+          
         </div>
       )}
+      <div className="flex gap-4">
 
-      <button onClick={joinRoom} className="bg-[#7CA084] w-full text-white px-4 py-2 rounded-md font-medium">
+      <button
+        onClick={handleMakeAdmin}
+        className="bg-gray-800 w-full text-white px-4 py-3 rounded-md font-medium"
+        >
+        Mesa
+      </button>
+
+      <button onClick={joinRoom} className="bg-[#7CA084] w-full text-white px-4 py-3 rounded-md font-medium">
         Jugar
       </button>
 
       {/* Botón para hacer administrador */}
-      <button
-        onClick={handleMakeAdmin}
-        className="bg-[#985858] w-full text-white px-4 py-2 rounded-md font-medium mt-4"
-      >
-        Mesa
-      </button>
+        </div>
 
-      <TransferModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        ranking={ranking}
-        userData={userData}
-        user={user}
-        handleTransfer={handleTransfer}
-      />
+ 
 
       <div className="w-full mt-8">
         <h2 className="text-xl text-gray-600 font-semibold mb-2">Ranking</h2>

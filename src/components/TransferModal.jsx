@@ -4,9 +4,8 @@ const TransferModal = ({
   isModalOpen,
   setIsModalOpen,
   ranking,
-  userData,
   handleTransfer,
-  user
+  user,
 }) => {
   const [selectedUserId, setSelectedUserId] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
@@ -20,11 +19,11 @@ const TransferModal = ({
   }, [selectedUserId]);
 
   useEffect(() => {
-    if(step == 1) {
-        setTransferError("");
-        }
+    if (step == 1) {
+      setTransferError("");
+    }
     if (transferAmount) {
-        setTransferError("");
+      setTransferError("");
     }
   }, [transferAmount, step]);
 
@@ -49,13 +48,8 @@ const TransferModal = ({
       // Convertir a número antes de transferir
       const amount = Number(transferAmount);
 
-      if (isNaN(amount) || amount <= 0 || amount > userData.balance) {
-        setTransferError("Monto inválido.");
-        return;
-      }
-
       try {
-          setIsModalOpen(false);
+        setIsModalOpen(false);
         await handleTransfer(selectedUserId, amount); // Llamada a la función handleTransfer
         setSelectedUserId("");
         setTransferAmount("");
@@ -90,52 +84,61 @@ const TransferModal = ({
 
   return (
     isModalOpen && (
-      <div className="fixed inset-0 bg-white text-gray-600 overflow-scroll flex justify-center items-start z-50">
-        <div className="bg-white p-6 max-w-md w-full">
-           
-          <h2 className="text-xl text-gray-600 font-semibold">
-          Tranferir
+      <div className="fixed inset-0 bg-white flex flex-col py-6 items-end z-50 max-w-md mx-auto">
+        <button
+          onClick={() => {
+            setIsModalOpen(false);
+            setSelectedUserId("");
+            setTransferAmount("");
+            setStep(1); // Volver al paso 1
+          }} // Cerrar el modal
+          className="bg-gray-800 text-white p-2 rounded flex items-center justify-center self-end"
+        >
+          
+          <span className="material-symbols-outlined">
+chevron_backward
+</span>
+        </button>
+        <div className="bg-white max-w-md w-full my-6">
+          <h2 className="text-xl text-gray-800 font-semibold ">
+            Selecciona Jugador
           </h2>
-          <p className="text-sm text-gray-500 mb-6">
-                  Disponible: {userData.balance}k
-                </p>
 
           <form onSubmit={handleFormSubmit}>
             {step === 1 ? (
               <div className="mb-4">
                 <div className="grid gap-1">
+                  {ranking.length === 0 && (
+                    <p className="text-gray-500 w-full text-left mt-3">
+                      no hay jugadores en la sala
+                    </p>
+                  )}
+
                   {ranking.map((player) => (
                     <div key={player.id}>
-
-                    {player.id !== user.uid && (
-                      
-                      
-                      <button
-                      key={player.id}
-                      type="button"
-                      onClick={() => setSelectedUserId(player.id)}
-                      className={`border  rounded p-2 w-full text-left ${
-                        selectedUserId === player.id
-                        ? "bg-[#7CA084] text-white"
-                        : "bg-white"
-                      }`}
-                      >
-                        {player.name}
-                      </button>
-
-)}
-</div>
+                      {player.id !== user.uid && (
+                        <button
+                          key={player.id}
+                          type="button"
+                          onClick={() => setSelectedUserId(player.id)}
+                          className={` border  rounded p-2 w-full text-left mt-6 ${
+                            selectedUserId === player.id
+                              ? "bg-[#7CA084] text-white"
+                              : "bg-white"
+                          }`}
+                        >
+                          {player.name}
+                        </button>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>
             ) : (
               <div className="mb-4 text-gray-600">
                 <p className="mb-2">
-                  Enviar a <b>
-                  {selectedUser?.name}
-                    </b> 
+                  Enviar a <b>{selectedUser?.name}</b>
                 </p>
-                
 
                 <input
                   type="text"
@@ -163,18 +166,17 @@ const TransferModal = ({
                     onClick={handleDeleteLastDigit}
                     className="border border-[#7CA084] p-2 rounded flex justify-center items-center"
                   >
-                   <span className="material-symbols-outlined text-lg">
-backspace
-</span>
-
+                    <span className="material-symbols-outlined text-lg">
+                      backspace
+                    </span>
                   </button>
                   <button
-    type="button"
-    onClick={() => handleAmountChange(transferAmount + "0")}
-    className="border border-[#7CA084] p-2 rounded"
-  >
-    0
-  </button>
+                    type="button"
+                    onClick={() => handleAmountChange(transferAmount + "0")}
+                    className="border border-[#7CA084] p-2 rounded"
+                  >
+                    0
+                  </button>
                   <button
                     type="button"
                     onClick={handleDeleteAll}
@@ -198,17 +200,6 @@ backspace
             )}
           </form>
 
-          <button
-            onClick={() => {
-              setIsModalOpen(false);
-              setSelectedUserId("");
-              setTransferAmount("");
-              setStep(1); // Volver al paso 1
-            }}
-            className="bg-white border border-gray-600 text-gray-600 w-full mt-4 py-2 rounded-md font-medium"
-          >
-            Cerrar
-          </button>
         </div>
       </div>
     )
