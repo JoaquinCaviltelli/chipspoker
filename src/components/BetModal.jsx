@@ -224,7 +224,7 @@ const BetModal = ({
               <div
                 onDoubleClick={handlePass} // Para escritorio
                 onTouchEnd={handleTouch} // Para dispositivos móviles
-                className="bg-radial-degradado text-white  h-full w-full mb-4 flex justify-center items-center flex-col cursor-pointer select-none rounded-md"
+                className="bg-radial-degradado text-white  h-full w-full mb-4 flex justify-center items-center flex-col cursor-pointer select-none rounded-r-md"
               >
                 <span className="material-symbols-outlined text-4xl">
                   touch_double
@@ -234,7 +234,7 @@ const BetModal = ({
               </div>
             ) : (
               <div
-                className={`h-full w-full mb-4 flex flex-col gap-3 justify-center items-center rounded-md ${
+                className={`h-full w-full mb-4 flex flex-col gap-3 justify-center items-center rounded-r-md ${
                   isPlayerFolded ? "bg-degradado" : "bg-gray-200 "
                 }`}
               >
@@ -255,7 +255,7 @@ const BetModal = ({
             )}
           </>
         ) : (
-          <div className="bg-radial-degradado rounded-md h-full w-full mb-4 select-none">
+          <div className="bg-radial-degradado rounded-r-md h-full w-full mb-4 select-none">
             {/* Área donde se acumulan las fichas seleccionadas */}
             {renderSelectedFiches()}
           </div>

@@ -53,7 +53,7 @@ const SliderButton = ({
 
   return (
     <div
-      className={`w-20 h-full  transition-all relative overflow-hidden rounded-md  ${
+      className={`w-20 h-full  transition-all relative overflow-hidden rounded-l-md  ${
         isActive ? "bg-[#985858]" : "bg-gray-200"
       }`}
       onTouchStart={handleTouchStart}

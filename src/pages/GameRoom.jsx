@@ -32,6 +32,7 @@ const GameRoom = () => {
       setPlayerData((prevState) => ({
         ...prevState,
         name: playerInRoom.name,
+        avatar: playerInRoom.avatar,
         balance: playerInRoom.balance,
         bet: playerInRoom.bet,
         totalBetInRound: playerInRoom.totalBetInRound,
@@ -143,16 +144,17 @@ const GameRoom = () => {
 
   return (
     <div className="fixed inset-0 flex flex-col justify-center max-w-3xl mx-auto">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
+      <div className="flex items-end justify-between mb-2">
+        <div className="flex gap-3">
           <button
             onClick={leaveRoom}
             className="bg-[#985858] text-white p-2 px-3 rounded-r flex items-center"
           >
             <span className="material-symbols-outlined rotate-180">logout</span>
           </button>
-          <div className="flex gap-2 my-6 mx-3">
-            <h1 className="text-3xl text-gray-600 font-semibold capitalize">
+            <img className="w-16 py-2" src={playerData.avatar} alt="" />
+          <div className="flex flex-col justify-end pb-3">
+            <h1 className="text-3xl text-gray-700 font-semibold capitalize leading-5">
               {playerData.name}
             </h1>
             <span className=" text-gray-600 font-semibold text-sm">
@@ -162,7 +164,7 @@ const GameRoom = () => {
         </div>
         {/* Botón para abrir el modal con las manos de póker */}
         <button onClick={toggleModal} className="text-gray-800 z-30 p-3">
-          <span className="material-symbols-outlined text-4xl font-medium">
+          <span className={`material-symbols-outlined text-4xl transition-all font-medium ${isModalOpen && "rotate-90"}`}>
             playing_cards
           </span>
         </button>

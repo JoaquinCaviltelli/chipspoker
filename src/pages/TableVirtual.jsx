@@ -157,7 +157,7 @@ const TableVirtual = () => {
       case "folded":
         return "Me voy";
       default:
-        return "...";
+        return "";
     }
   };
 
@@ -319,7 +319,6 @@ const TableVirtual = () => {
         />
       </div>
       <div className="grid grid-cols-4  w-full mx-auto">
-        
         <button
           onClick={resetRound}
           className="bg-[#985858] text-white px-6 py-2 rounded-md  flex justify-center items-center gap-2"
@@ -348,7 +347,8 @@ const TableVirtual = () => {
         )}
         {round === 4 && (
           <button
-            disabled={roomData?.pot === 0}k
+            disabled={roomData?.pot === 0}
+            k
             onClick={handleDistributePot}
             className={`px-6 py-2 rounded-md  text-white flex justify-center items-center gap-2 ${
               roomData?.pot === 0
@@ -361,7 +361,7 @@ const TableVirtual = () => {
         )}
       </div>
 
-      <div className="flex justify-between my-10 gap-3">
+      <div className="flex justify-between mt-10 mb-20 gap-3">
         {getCardsToShow().map((card, index) => (
           <div key={index} className="card-container w-full">
             <Carta isFlipped={card.isFlipped} round={round} />
@@ -372,7 +372,7 @@ const TableVirtual = () => {
       {/* <div className="mt-6 flex justify-center space-x-4 mx-6"></div> */}
 
       <div className="my-6">
-        <ul className="flex justify-center flex-wrap items-center gap-6">
+        <ul className="flex justify-center flex-wrap items-end gap-12">
           {players.map((player) => {
             return (
               <li
@@ -380,20 +380,51 @@ const TableVirtual = () => {
                 className="flex flex-col items-center font-semibold cursor-pointer"
                 onClick={() => round === 4 && handlePlayerSelection(player)} // Solo se puede seleccionar en la ronda 4
               >
-                <div className="mb-4 text-xl font-bold text-center">
+                <div
+                  className={`leading-3 relative font-bold text-center flex flex-col `}
+                >
                   <span
-                    className={
-                      player.id === currentTurn
-                        ? "text-[#5B7661]"
-                        : player.status === "folded"
-                        ? "text-[#985858]"
-                        : "text-gray-700"
-                    }
+                    className={`text-sm  absolute text-white -right-6 top-2 rounded-lg z-10 ${
+                      player.id === currentTurn || player.status !== "none"
+                        ? "p-2"
+                        : ""
+                        
+                    } relative ${player.id === currentTurn ? "bg-[#5B7661]" : "bg-gray-700 opacity-70"} ${player.status === "folded" && "opacity-10"}`}
                   >
                     {getAction(player)}
+                    {player.id === currentTurn &&
+                      player.status === "none" &&
+                      ". . ."}
+                    <span
+                      className={`${
+                        player.id === currentTurn |
+                        player.status !== "none" &&
+                        "absolute right-2/4 -bottom-4 transform -translate-x-1/2 border-8 border-transparent"
+                      } ${player.id === currentTurn ? "border-t-[#5B7661]" : "border-t-gray-700 opacity-100"}`}
+                    ></span>
                   </span>
+
+                  <div
+                    className={` flex flex-col ${
+                      selectedPlayers.includes(player.id)
+                      ? "opacity-100 text-gray-600 scale-110" :
+                      player.id === currentTurn
+                        ? "text-gray-600"
+                        : player.status === "folded"
+                        ? "opacity-10"
+                        : "text-gray-600 opacity-70 "
+                    }`}
+                  >
+                    <img className={`w-16 ${
+                      player.id === currentTurn
+                        && "w-20"}`} src={player.avatar} alt="" />
+                    <span className="capitalize text-lg leading-5">
+                      {player.name}
+                    </span>
+                    <span className="text-xs">{player.balance}k</span>
+                  </div>
                 </div>
-                <div
+                {/* <div
                   className={`flex flex-col justify-center items-center text-white w-36 h-16 leading-3 rounded-lg  ${
                     selectedPlayers.includes(player.id)
                       ? "bg-[#5B7661]" // Resaltar con azul si está seleccionado
@@ -408,10 +439,10 @@ const TableVirtual = () => {
                   <div>
                     <span className="text-xs ">{player.balance}k</span>
                   </div>
-                </div>
-                <span className="text-xs text-gray-600 self-end pr-3 py-1">
+                </div> */}
+                {/* <span className="text-xs text-gray-600 self-end pr-3 py-1">
                   Total: {player.totalBetInRound}k
-                </span>
+                </span> */}
               </li>
             );
           })}

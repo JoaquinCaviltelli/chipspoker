@@ -89,6 +89,7 @@ const Home = () => {
         totalBetInRound: 0,
         order: nextOrder,
         status: "none",
+        avatar: userData.avatar
       };
 
       await setDoc(roomRef, { players: { [user.uid]: player } }, { merge: true });
@@ -114,6 +115,7 @@ const Home = () => {
     
   };
 
+
   if (loading) {
     return (
       <Loader />
@@ -123,10 +125,13 @@ const Home = () => {
   return (
     <div className="p-6 max-w-3xl mx-auto">
       {userData && (
-        <div className="flex justify-start items-center gap-3 mb-8">
-         
+        <div className="flex justify-between items-end gap-3 mb-8">
+         <div className="flex items-end gap-3">
+          <img className="w-16" src={userData.avatar} alt="" />
+
             <h1 className="text-4xl text-gray-600 font-semibold capitalize">{userData.name}</h1>
-            <span className=" text-gray-600 font-semibold">{userData.balance}</span>
+         </div>
+            <span className=" text-gray-600 font-semibold">{userData.balance}k</span>
          
           
         </div>
