@@ -201,7 +201,7 @@ const BetModal = ({
   };
 
   const currentPlayer = players.find(player => player.id === currentTurn);
-  const currentPlayerName = currentPlayer ? currentPlayer.name : 'Cargando...';
+  const currentPlayerName = currentPlayer ? currentPlayer.name : '...';
 
   return (
     <div className="w-full flex flex-col justify-between items-center h-full">
@@ -245,7 +245,9 @@ const BetModal = ({
                 >
                   hourglass_top
                 </span>
-                <p className="text-gray-500 normal-case">
+                <p className={`normal-case ${
+                    isPlayerFolded ? "text-white" : "text-gray-500"
+                  }`}>
                    esperando a <b>
                    {currentPlayerName}
                     </b>

@@ -144,9 +144,9 @@ poker_chip
 
       <button
         onClick={handleMakeAdmin}
-        className="bg-gray-800 w-full text-white px-4 py-3 rounded-md font-medium"
+        className="bg-gray-700 w-full text-white px-4 py-3 rounded-md font-medium"
         >
-        Mesa
+        Crear mesa
       </button>
 
       <button onClick={joinRoom} className="bg-[#7CA084] w-full text-white px-4 py-3 rounded-md font-medium">
