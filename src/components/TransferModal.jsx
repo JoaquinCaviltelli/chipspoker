@@ -84,8 +84,8 @@ const TransferModal = ({
 
   return (
     isModalOpen && (
-      <div className="fixed inset-0 bg-white flex flex-col  items-end z-50 w-full">
-        <div className="bg-white max-w-3xl p-6 w-full mx-auto flex flex-col ">
+      <div className="fixed inset-0 bg-[#5B7661] flex flex-col  items-end z-50 w-full">
+        <div className="max-w-3xl p-6 w-full mx-auto flex flex-col my-10">
           <button
             onClick={() => {
               setIsModalOpen(false);
@@ -93,13 +93,13 @@ const TransferModal = ({
               setTransferAmount("");
               setStep(1); // Volver al paso 1
             }} // Cerrar el modal
-            className="bg-[#5B7661] text-white p-2 rounded flex items-center justify-center self-end mb-6"
+            className="bg-white text-[#5B7661] p-4 rounded-full flex items-center justify-center self-end fixed bottom-3 right-3"
           >
-            <span className="material-symbols-outlined">chevron_backward</span>
+            <span className="material-symbols-outlined font-bold">chevron_backward</span>
           </button>
-          <div className=" text-gray-700  flex gap-2  w-full  items-center text-left mb-6">
+          <div className=" text-white  flex gap-2  w-full  items-center text-left mb-6">
             <span className="material-symbols-outlined text-3xl">mintmark</span>
-            <p className="font-medium leading-4">Agregar fichas</p>
+            <p className="font-medium leading-4 ">Agregar fichas</p>
           </div>
 
           <form onSubmit={handleFormSubmit}>
@@ -107,7 +107,7 @@ const TransferModal = ({
               <div className="mb-4">
                 <div className="grid gap-1">
                   {ranking.length === 0 && (
-                    <p className="text-gray-500 w-full text-left">
+                    <p className="text-white w-full text-left">
                       no hay jugadores en la sala
                     </p>
                   )}
@@ -119,7 +119,7 @@ const TransferModal = ({
                           key={player.id}
                           type="button"
                           onClick={() => setSelectedUserId(player.id)}
-                          className=" text-gray-700 p-3 flex gap-3  items-center w-full  h-16  shadow-lg rounded-md border  text-left mb-3 "
+                          className=" text-gray-700 p-3 flex gap-3  items-center w-full  h-16  shadow-lg rounded-md border  text-left mb-3 bg-white"
                         >
                           <span className="material-symbols-outlined">
                             person
@@ -135,8 +135,8 @@ const TransferModal = ({
                 </div>
               </div>
             ) : (
-              <div className="mb-4 text-gray-600">
-                <p className="mb-2">
+              <div className="mb-4 text-gray-600 font-medium">
+                <p className="mb-2 text-white">
                   Enviar a <b>{selectedUser?.name}</b> (Total:{" "}
                   {selectedUser?.balance}k)
                 </p>
@@ -145,7 +145,7 @@ const TransferModal = ({
                   type="text"
                   value={transferAmount}
                   readOnly
-                  className="border border-[#7CA084] text-gray-600 placeholder:text-gray-600 rounded p-2 mb-4 w-full outline-none text-lg font-medium text-center"
+                  className="b text-gray-600 placeholder:text-gray-600 rounded p-2 mb-4 w-full outline-none text-lg font-medium text-center"
                 />
                 <div className="grid grid-cols-3 gap-2 mb-4">
                   {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map(
@@ -156,7 +156,7 @@ const TransferModal = ({
                         onClick={() =>
                           handleAmountChange(transferAmount + number)
                         }
-                        className="border border-[#7CA084] p-2  rounded"
+                        className="bg-white p-2  rounded"
                       >
                         {number}
                       </button>
@@ -165,7 +165,7 @@ const TransferModal = ({
                   <button
                     type="button"
                     onClick={handleDeleteLastDigit}
-                    className="border border-[#7CA084] p-2 rounded flex justify-center items-center"
+                    className="bg-white p-2 rounded flex justify-center items-center"
                   >
                     <span className="material-symbols-outlined text-lg">
                       backspace
@@ -174,14 +174,14 @@ const TransferModal = ({
                   <button
                     type="button"
                     onClick={() => handleAmountChange(transferAmount + "0")}
-                    className="border border-[#7CA084] p-2 rounded"
+                    className="bg-white p-2 rounded"
                   >
                     0
                   </button>
                   <button
                     type="button"
                     onClick={handleDeleteAll}
-                    className="border border-[#7CA084] p-2 rounded"
+                    className="bg-white p-2 rounded"
                   >
                     c
                   </button>

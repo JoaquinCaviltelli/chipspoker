@@ -292,32 +292,8 @@ const TableVirtual = () => {
   }
 
   return (
-    <div className="max-w-3xl p-6 m-auto">
-      <div className="w-full max-full mx-auto flex mb-6 items-center justify-end">
-        <button
-          onClick={() => setIsAdminModalOpen(true)}
-          className="bg-[#5B7661] text-white p-2  rounded flex items-center"
-        >
-          <span className="material-symbols-outlined">menu</span>
-        </button>
-
-        <AdminActionsModal
-          isModalOpen={isAdminModalOpen}
-          setIsAdminModalOpen={setIsAdminModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          revokeAdmin={revokeAdmin}
-          deleteRoom={deleteRoom}
-        />
-
-        <TransferModal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          ranking={players} // Pasar los jugadores como ranking
-          userData={userData}
-          user={user}
-          handleTransfer={handleTransfer}
-        />
-      </div>
+    <div className="max-w-3xl p-6 m-auto mt-10">
+      
       <div className="grid grid-cols-4  w-full mx-auto">
         <button
           onClick={resetRound}
@@ -460,6 +436,31 @@ const TableVirtual = () => {
             );
           })}
         </ul>
+      </div>
+      <div className="w-full max-full mx-auto flex items-center justify-end fixed bottom-3 right-3 z-30">
+        <button
+          onClick={() => setIsAdminModalOpen(true)}
+          className="bg-[#5B7661] text-white p-4  rounded-full flex items-center"
+        >
+          <span className="material-symbols-outlined">menu</span>
+        </button>
+
+        <AdminActionsModal
+          isModalOpen={isAdminModalOpen}
+          setIsAdminModalOpen={setIsAdminModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          revokeAdmin={revokeAdmin}
+          deleteRoom={deleteRoom}
+        />
+
+        <TransferModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          ranking={players} // Pasar los jugadores como ranking
+          userData={userData}
+          user={user}
+          handleTransfer={handleTransfer}
+        />
       </div>
     </div>
   );
