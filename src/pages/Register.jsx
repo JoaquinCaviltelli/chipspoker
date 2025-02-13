@@ -91,7 +91,7 @@ const Register = () => {
               effect={"cards"}
               grabCursor={true}
               modules={[EffectCards]}
-              className="mySwiper w-36 h-40"
+              className="mySwiper w-36 h-40 bg-white"
               onSlideChange={handleSlideChange} // Añadir evento para el cambio de slide
             >
               {avatarUrls.map((url, index) => (
@@ -101,7 +101,7 @@ const Register = () => {
                   <img
                     src={url}
                     alt={`Avatar ${index + 1}`}
-                    className="w-36 h-40 mx-auto px-4 bg-white border-2 border-[#7CA084] rounded-md"
+                    className="w-36 h-40 mx-auto px-4 bg-white border-2 border-gray-100 rounded-md"
                   />
                 </SwiperSlide>
               ))}

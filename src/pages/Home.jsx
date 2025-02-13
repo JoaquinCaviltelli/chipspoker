@@ -125,18 +125,22 @@ const Home = () => {
   return (
     <div className="p-6 max-w-3xl mx-auto">
       {userData && (
-        <div className="flex justify-between items-end gap-3 mb-8">
-         <div className="flex items-end gap-3">
-          <img className="w-16" src={userData.avatar} alt="" />
+        <div className="flex justify-center gap-3 mt-8 mb-12 relative">
+         <div className="flex items-center flex-col">
+          <img className="w-24" src={userData.avatar} alt="" />
 
-            <h1 className="text-4xl text-gray-600 font-semibold capitalize">{userData.name}</h1>
+            <h1 className="text-2xl text-gray-600 font-semibold capitalize">{userData.name}</h1>
          </div>
-            <span className=" text-gray-600 font-semibold">{userData.balance}k</span>
+            <span className="absolute right-0 text-gray-600 font-bold flex  gap-2">
+            <span className="material-symbols-outlined">
+poker_chip
+</span>
+              {userData.balance}</span>
          
           
         </div>
       )}
-      <div className="flex gap-4">
+      <div className="flex gap-4 flex-col-reverse sm:flex-row">
 
       <button
         onClick={handleMakeAdmin}
