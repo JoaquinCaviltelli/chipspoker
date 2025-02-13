@@ -22,11 +22,28 @@ const generateRandomSeed = () => {
 
 const Register = () => {
   const [name, setName] = useState("");
+  const [currentBalance, setCurrentBalance] = useState(3000);
   const [error, setError] = useState(""); // Estado para manejar errores
   const [avatarUrls, setAvatarUrls] = useState([]); // Estado para manejar los URLs de los avatares
   const [selectedAvatar, setSelectedAvatar] = useState(0); // Estado para manejar el avatar seleccionado
   const { loginAnonymously, user } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        const userSnapshot = await getDoc(userRef);
+        if (userSnapshot.exists()) {
+          const userData = userSnapshot.data();
+          setName(userData.name); // Establecer el nombre en el input si ya existe
+          setCurrentBalance(userData.balance)
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
 
   // Función para obtener las URLs de los avatares aleatorios
   const generateAvatars = () => {
@@ -58,15 +75,8 @@ const Register = () => {
       }
 
       const userRef = doc(db, "users", currentUser.uid);
-        // Obtener los datos del usuario actual
-    const userSnapshot = await getDoc(userRef);
-    let currentBalance = 3000; // Valor predeterminado para el balance
-      // Si el documento ya existe, tomar el balance actual, si no, usar 3000
-      if (userSnapshot.exists()) {
-        const userData = userSnapshot.data();
-        currentBalance = userData.balance || 3000; // Usar balance actual o 3000 si no existe
-      }
-
+   
+    
     
 
       // Guardar nombre, avatar, y otros datos del usuario en Firebase
