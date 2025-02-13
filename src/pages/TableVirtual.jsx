@@ -384,12 +384,17 @@ const TableVirtual = () => {
                   className={`leading-3 relative font-bold text-center flex flex-col `}
                 >
                   <span
-                    className={`text-sm  absolute text-white -right-6 top-2 rounded-lg z-10 ${
+                    className={`text-sm  absolute text-white -right-8 top-3 rounded-lg z-10 ${
                       player.id === currentTurn || player.status !== "none"
                         ? "p-2"
                         : ""
-                        
-                    } relative ${player.id === currentTurn ? "bg-[#5B7661]" : "bg-gray-700 opacity-70"} ${player.status === "folded" && "opacity-10"}`}
+                    } relative ${
+                      player.id === currentTurn
+                        ? "bg-[#5B7661]"
+                        : player.status === "folded"
+                        ? "opacity-50 bg-[#985858]"
+                        : "bg-gray-700"
+                    }`}
                   >
                     {getAction(player)}
                     {player.id === currentTurn &&
@@ -397,27 +402,35 @@ const TableVirtual = () => {
                       ". . ."}
                     <span
                       className={`${
-                        player.id === currentTurn |
-                        player.status !== "none" &&
-                        "absolute right-2/4 -bottom-4 transform -translate-x-1/2 border-8 border-transparent"
-                      } ${player.id === currentTurn ? "border-t-[#5B7661]" : "border-t-gray-700 opacity-100"}`}
+                        (player.id === currentTurn) |
+                          (player.status !== "none") &&
+                        "absolute left-4 -bottom-4 transform -translate-x-1/2 border-8 border-transparent"
+                      } ${
+                        player.id === currentTurn
+                          ? "border-t-[#5B7661]"
+                          : player.status === "folded"
+                          ? "border-t-[#985858]"
+                          : "border-t-gray-700 opacity-100"
+                      }`}
                     ></span>
                   </span>
 
                   <div
-                    className={` flex flex-col ${
+                    className={` flex flex-col justify-center items-center ${
                       selectedPlayers.includes(player.id)
-                      ? "opacity-100 text-gray-600 scale-110" :
-                      player.id === currentTurn
+                        ? "opacity-100 text-gray-600 scale-110"
+                        : player.id === currentTurn
                         ? "text-gray-600"
                         : player.status === "folded"
                         ? "opacity-10"
                         : "text-gray-600 opacity-70 "
                     }`}
                   >
-                    <img className={`w-16 ${
-                      player.id === currentTurn
-                        && "w-20"}`} src={player.avatar} alt="" />
+                    <img
+                      className={`w-16 ${player.id === currentTurn && "w-20"}`}
+                      src={player.avatar}
+                      alt=""
+                    />
                     <span className="capitalize text-lg leading-5">
                       {player.name}
                     </span>
