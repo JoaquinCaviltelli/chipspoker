@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { db } from "../firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
 // Importar Swiper y módulos
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -58,16 +58,23 @@ const Register = () => {
       }
 
       const userRef = doc(db, "users", currentUser.uid);
+        // Obtener los datos del usuario actual
+    const userSnapshot = await getDoc(userRef);
+    let currentBalance = 3000; // Valor predeterminado para el balance
+      // Si el documento ya existe, tomar el balance actual, si no, usar 3000
+      if (userSnapshot.exists()) {
+        const userData = userSnapshot.data();
+        currentBalance = userData.balance || 3000; // Usar balance actual o 3000 si no existe
+      }
 
-      // Verificar si el nombre es "Mesa" y asignar el valor de admin
-      const adminStatus = name.trim().toLowerCase() === "mesa" ? true : false;
+    
 
       // Guardar nombre, avatar, y otros datos del usuario en Firebase
       await setDoc(userRef, {
         name,
         avatar: avatarUrls[selectedAvatar], // Guardar el avatar seleccionado
-        balance: 3000,
-        admin: adminStatus,  // Establecer admin según el nombre
+        balance: currentBalance,
+        admin: false,  // Establecer admin según el nombre
       });
 
       navigate("/"); // Redirigir al inicio
