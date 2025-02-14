@@ -100,8 +100,8 @@ const Register = () => {
 
   return (
     <div className="flex justify-center inset-0 min-h-screen">
-      <div className="p-6 w-full max-w-sm ">
-        <div className="flex justify-center h-40">
+      <div className=" w-full ">
+        <div className="flex justify-center h-80 max-w-lg mx-auto">
           {/* Swiper para los avatares con efecto cards */}
           {avatarUrls.length > 0 && (
             <Swiper
@@ -128,6 +128,8 @@ const Register = () => {
             </Swiper>
           )}
         </div>
+        <div className="p-6">
+
 
         <div className="relative">
           
@@ -139,7 +141,7 @@ const Register = () => {
               setName(e.target.value);
               setError(""); // Limpiar el error al escribir
             }}
-            className="w-full  outline-none text-3xl text-gray-500 font-semibold text-center mb-20"
+            className="w-full  outline-none text-3xl text-gray-500 font-semibold text-center"
             maxLength={10}
           />
           {error && <p className="text-red-500 text-sm absolute w-full text-center bottom-0">{error}</p>}
@@ -148,11 +150,12 @@ const Register = () => {
         <button
           onClick={handleRegister}
           className="mt-4 w-full bg-[#7CA084] text-white font-semibold py-2 rounded"
-        >
+          >
           {user ? "Actualizar" : "Registrarse"}
           
         </button>
       </div>
+          </div>
     </div>
   );
 };
