@@ -100,8 +100,8 @@ const Register = () => {
 
   return (
     <div className="flex justify-center inset-0 min-h-screen">
-      <div className="p-6 w-full max-w-md ">
-        <div className="flex justify-center h-44">
+      <div className="p-6 w-full max-w-sm ">
+        <div className="flex justify-center h-40">
           {/* Swiper para los avatares con efecto cards */}
           {avatarUrls.length > 0 && (
             <Swiper

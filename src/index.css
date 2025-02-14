@@ -116,11 +116,7 @@
 }
     
 
-/* Aumenta el tamaño del slide centrado */
-.swiper-slide-active {
-  transform: scale(1.5); /* Aumenta el tamaño del slide centrado */
-  transition: transform 0.3s ease;
-}
+
 
 /* Aplica opacidad reducida a todos los slides no activos (no centrados) */
 .swiper-slide {
@@ -131,4 +127,6 @@
 /* Restablece la opacidad de los slides activos */
 .swiper-slide-active {
   opacity: 1; /* Opacidad normal para el slide centrado */
+  transform: scale(1.5); /* Aumenta el tamaño del slide centrado */
+  transition: transform 0.3s ease;
 }
