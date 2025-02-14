@@ -144,7 +144,7 @@ const GameRoom = () => {
 
   return (
     <div className="fixed inset-0 flex flex-col justify-center max-w-3xl mx-auto">
-      <div className="flex items-end justify-between">
+      <div className="flex items-end justify-between my-2">
         <div className="flex gap-3">
           <button
             onClick={leaveRoom}
@@ -163,7 +163,7 @@ const GameRoom = () => {
           </div>
         </div>
         {/* Botón para abrir el modal con las manos de póker */}
-        <button onClick={toggleModal} className="text-gray-800 z-30 p-3">
+        <button onClick={toggleModal} className="text-gray-800 z-30 p-3 px-5">
           <span className={`material-symbols-outlined text-4xl transition-all font-medium ${isModalOpen && "rotate-90"}`}>
             playing_cards
           </span>

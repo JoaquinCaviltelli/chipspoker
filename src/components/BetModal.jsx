@@ -247,6 +247,8 @@ const BetModal = ({
                 >
                   hourglass_top
                 </span>
+                {!isPlayerFolded && (
+
                 <div className={` ${
                     isPlayerFolded ? "text-white" : "text-gray-500"
                   }`}>
@@ -260,6 +262,8 @@ const BetModal = ({
                    </div>
 
                 </div>
+                )}
+
               </div>
             )}
           </>
