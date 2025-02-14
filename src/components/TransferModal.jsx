@@ -84,7 +84,7 @@ const TransferModal = ({
 
   return (
     isModalOpen && (
-      <div className="fixed inset-0 bg-[#5B7661] flex flex-col  items-end z-50 w-full">
+      <div className="fixed inset-0 bg-white flex flex-col  items-end z-50 w-full">
         <div className="max-w-3xl p-6 w-full mx-auto flex flex-col my-10">
           <button
             onClick={() => {
@@ -93,11 +93,11 @@ const TransferModal = ({
               setTransferAmount("");
               setStep(1); // Volver al paso 1
             }} // Cerrar el modal
-            className="bg-white text-[#5B7661] p-4 rounded-full flex items-center justify-center self-end fixed bottom-3 right-3"
+            className="bg-gray-800 text-white p-4 rounded-full flex items-center justify-center self-end fixed bottom-3 right-3"
           >
             <span className="material-symbols-outlined font-bold">chevron_backward</span>
           </button>
-          <div className=" text-white  flex gap-2  w-full  items-center text-left mb-6">
+          <div className=" text-gray-800  flex gap-2  w-full  items-center text-left">
             <span className="material-symbols-outlined text-3xl">mintmark</span>
             <p className="font-medium leading-4 ">Agregar fichas</p>
           </div>
@@ -107,7 +107,7 @@ const TransferModal = ({
               <div className="mb-4">
                 <div className="grid gap-1">
                   {ranking.length === 0 && (
-                    <p className="text-white w-full text-left">
+                    <p className="text-gray-800 w-full text-left">
                       no hay jugadores en la sala
                     </p>
                   )}
@@ -119,12 +119,10 @@ const TransferModal = ({
                           key={player.id}
                           type="button"
                           onClick={() => setSelectedUserId(player.id)}
-                          className=" text-gray-700 p-3 flex gap-3  items-center w-full  h-16  shadow-lg rounded-md border  text-left mb-3 bg-white"
+                          className=" text-gray-800 p-4 flex gap-3  items-center w-full  shadow-lg rounded-md border  text-left mb-3 bg-white"
                         >
-                          <span className="material-symbols-outlined">
-                            person
-                          </span>
-                          <div className="flex justify-between w-full items-center">
+                          <img  className="w-8" src={player.avatar} alt="" />
+                          <div className="flex justify-between w-full items-center translate-y-0.5">
                             <span className="font-medium">{player.name}</span>
                             <span className="text-sm">{player.balance}k</span>
                           </div>
@@ -135,17 +133,23 @@ const TransferModal = ({
                 </div>
               </div>
             ) : (
-              <div className="mb-4 text-gray-600 font-medium">
-                <p className="mb-2 text-white">
-                  Enviar a <b>{selectedUser?.name}</b> (Total:{" "}
-                  {selectedUser?.balance}k)
+              <div className="mb-4 text-white font-medium">
+                <div className="text-gray-800 flex flex-col justify-center items-center mb-6">
+
+                <img  className="w-16" src={selectedUser?.avatar} alt="" />
+                <b>{selectedUser?.name}</b>
+                <p className="text-xs">
+                   
+                  {selectedUser?.balance}k
                 </p>
+                </div>
 
                 <input
                   type="text"
                   value={transferAmount}
+                  placeholder="0"
                   readOnly
-                  className="b text-gray-600 placeholder:text-gray-600 rounded p-2 mb-4 w-full outline-none text-lg font-medium text-center"
+                  className="b text-gray-600 placeholder:text-gray-600 rounded p-2 mb-4 w-full outline-none text-lg font-medium text-center border border-gray-600"
                 />
                 <div className="grid grid-cols-3 gap-2 mb-4">
                   {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map(
@@ -156,7 +160,7 @@ const TransferModal = ({
                         onClick={() =>
                           handleAmountChange(transferAmount + number)
                         }
-                        className="bg-white p-2  rounded"
+                        className="bg-gray-800 p-2  rounded"
                       >
                         {number}
                       </button>
@@ -165,7 +169,7 @@ const TransferModal = ({
                   <button
                     type="button"
                     onClick={handleDeleteLastDigit}
-                    className="bg-white p-2 rounded flex justify-center items-center"
+                    className="bg-gray-800 p-2 rounded flex justify-center items-center"
                   >
                     <span className="material-symbols-outlined text-lg">
                       backspace
@@ -174,14 +178,14 @@ const TransferModal = ({
                   <button
                     type="button"
                     onClick={() => handleAmountChange(transferAmount + "0")}
-                    className="bg-white p-2 rounded"
+                    className="bg-gray-800 p-2 rounded"
                   >
                     0
                   </button>
                   <button
                     type="button"
                     onClick={handleDeleteAll}
-                    className="bg-white p-2 rounded"
+                    className="bg-gray-800 p-2 rounded"
                   >
                     c
                   </button>
@@ -194,7 +198,7 @@ const TransferModal = ({
             {step === 2 && (
               <button
                 type="submit"
-                className="bg-[#7CA084] w-full text-white px-4 py-2 rounded-md font-medium"
+                className="bg-gray-800 w-full text-white px-4 py-3 rounded-md font-medium mt-6"
               >
                 Transferir
               </button>

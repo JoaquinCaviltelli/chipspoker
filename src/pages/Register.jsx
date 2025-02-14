@@ -99,16 +99,19 @@ const Register = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center inset-0 min-h-screen">
-      <div className="p-8 w-full max-w-sm -translate-y-28">
-        <div className="flex justify-center">
+    <div className="flex justify-center inset-0 min-h-screen">
+      <div className="p-6 w-full max-w-md ">
+        <div className="flex justify-center h-44">
           {/* Swiper para los avatares con efecto cards */}
           {avatarUrls.length > 0 && (
             <Swiper
-              effect={"cards"}
+            centeredSlides={true}
               grabCursor={true}
+              slidesPerView={3}
+              spaceBetween={30}
+              initialSlide={0}
               modules={[EffectCards]}
-              className="mySwiper w-36 h-40 bg-white"
+              className="mySwiper "
               onSlideChange={handleSlideChange} // Añadir evento para el cambio de slide
             >
               {avatarUrls.map((url, index) => (
@@ -118,7 +121,7 @@ const Register = () => {
                   <img
                     src={url}
                     alt={`Avatar ${index + 1}`}
-                    className="w-36 h-40 mx-auto px-4 bg-white border-2 border-gray-100 rounded-md"
+                    className="h-full"
                   />
                 </SwiperSlide>
               ))}
@@ -126,7 +129,7 @@ const Register = () => {
           )}
         </div>
 
-        <div className="mt-4">
+        <div className="relative">
           
           <input
             type="text"
@@ -136,17 +139,18 @@ const Register = () => {
               setName(e.target.value);
               setError(""); // Limpiar el error al escribir
             }}
-            className="w-full  outline-none text-4xl text-gray-500 font-semibold text-center mb-4"
+            className="w-full  outline-none text-3xl text-gray-500 font-semibold text-center mb-20"
             maxLength={10}
           />
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+          {error && <p className="text-red-500 text-sm absolute w-full text-center bottom-0">{error}</p>}
         </div>
 
         <button
           onClick={handleRegister}
           className="mt-4 w-full bg-[#7CA084] text-white font-semibold py-2 rounded"
         >
-          Registrarse
+          {user ? "Actualizar" : "Registrarse"}
+          
         </button>
       </div>
     </div>

@@ -7,14 +7,14 @@ const SliderButton = ({
   user,
   handleResetBet,
   isActive,
-  setIsActive,
+  setIsActive,round
 }) => {
   const [startY, setStartY] = useState(0); // Mantener startY para el movimiento vertical
   const [isSliding, setIsSliding] = useState(false);
 
   // Función para manejar el inicio del deslizamiento
   const handleTouchStart = (e) => {
-    if (isPlayerFolded) return; // Si el jugador ha foldado, no permite deslizar
+    if (isPlayerFolded || round === 4) return; // Si el jugador ha foldado, no permite deslizar
     setIsSliding(true);
     setStartY(e.touches[0].clientY); // Guardar la posición inicial del toque
   };
@@ -65,7 +65,7 @@ const SliderButton = ({
       </span>
       <button
         className={`absolute left-1/2 transform -translate-x-1/2 p-3 text-white text-center leading-4  font-semibold rounded-md transition-all w-20 h-16 duration-300 flex flex-col justify-center items-center gap-3 ${
-          currentTurn !== user && !isActive ? "bg-gray-500" : "bg-[#985858]"
+          currentTurn !== user && !isActive || round === 4 ? "bg-gray-500" : "bg-[#985858]"
         }`}
         style={{ top: isActive ? "0" : "calc(100% - 64px)" }} // El botón empieza en la parte inferior y se mueve hacia arriba
       >

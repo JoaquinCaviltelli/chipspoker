@@ -292,7 +292,7 @@ const TableVirtual = () => {
   }
 
   return (
-    <div className="max-w-3xl p-6 m-auto mt-10">
+    <div className="max-w-3xl p-6 m-auto mt-6">
       
       <div className="grid grid-cols-4  w-full mx-auto">
         <button
@@ -348,7 +348,7 @@ const TableVirtual = () => {
       {/* <div className="mt-6 flex justify-center space-x-4 mx-6"></div> */}
 
       <div className="my-6">
-        <ul className="flex justify-center flex-wrap items-end gap-12">
+        <ul className="flex justify-center flex-wrap items-end gap-10">
           {players.map((player) => {
             return (
               <li
@@ -360,7 +360,7 @@ const TableVirtual = () => {
                   className={`leading-3 relative font-bold text-center flex flex-col `}
                 >
                   <span
-                    className={`text-sm  absolute text-white -right-8 top-3 rounded-lg z-10 ${
+                    className={`text-sm  absolute text-white -right-8 top-3 rounded-lg z-10 shadow-lg ${
                       player.id === currentTurn || player.status !== "none"
                         ? "p-2"
                         : ""
@@ -394,7 +394,7 @@ const TableVirtual = () => {
                   <div
                     className={` flex flex-col justify-center items-center ${
                       selectedPlayers.includes(player.id)
-                        ? "opacity-100 text-gray-600 scale-110"
+                        ? "opacity-100 text-gray-600 scale-125"
                         : player.id === currentTurn
                         ? "text-gray-600"
                         : player.status === "folded"
@@ -440,7 +440,7 @@ const TableVirtual = () => {
       <div className="w-full max-full mx-auto flex items-center justify-end fixed bottom-3 right-3 z-30">
         <button
           onClick={() => setIsAdminModalOpen(true)}
-          className="bg-[#5B7661] text-white p-4  rounded-full flex items-center"
+          className="bg-gray-800 text-white p-4  rounded-full flex items-center"
         >
           <span className="material-symbols-outlined">menu</span>
         </button>

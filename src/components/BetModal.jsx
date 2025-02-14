@@ -173,7 +173,7 @@ const BetModal = ({
           className=" flex gap-3 justify-center items-center bg-white rounded px-4 py-2 cursor-pointer"
           >
           <h2 className="text-xl text-[#5B7661]  font-bold text-center">
-            {currentBet}
+            {currentBet}k
           </h2>
             </div>
       </div>
@@ -202,6 +202,7 @@ const BetModal = ({
 
   const currentPlayer = players.find(player => player.id === currentTurn);
   const currentPlayerName = currentPlayer ? currentPlayer.name : '...';
+  const currentPlayerAvatar = currentPlayer ? currentPlayer.avatar : '...';
 
   return (
     <div className="w-full flex flex-col justify-between items-center h-full">
@@ -214,6 +215,7 @@ const BetModal = ({
           handleResetBet={handleResetBet}
           isActive={isActive}
           setIsActive={setIsActive}
+          round={round}
         />
 
         {!currentBet ? (
@@ -245,14 +247,19 @@ const BetModal = ({
                 >
                   hourglass_top
                 </span>
-                <p className={`normal-case ${
+                <div className={` ${
                     isPlayerFolded ? "text-white" : "text-gray-500"
                   }`}>
-                   esperando a <b>
+                   
+                   <div className="flex opacity-60 flex-col justify-center items-center">
+
+                    <img className="w-14 " src={currentPlayerAvatar} alt="" />
+                   <b>
                    {currentPlayerName}
                     </b>
+                   </div>
 
-                </p>
+                </div>
               </div>
             )}
           </>

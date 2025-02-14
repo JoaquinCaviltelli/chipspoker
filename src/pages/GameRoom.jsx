@@ -144,7 +144,7 @@ const GameRoom = () => {
 
   return (
     <div className="fixed inset-0 flex flex-col justify-center max-w-3xl mx-auto">
-      <div className="flex items-end justify-between mb-2">
+      <div className="flex items-end justify-between">
         <div className="flex gap-3">
           <button
             onClick={leaveRoom}
@@ -158,7 +158,7 @@ const GameRoom = () => {
               {playerData.name}
             </h1>
             <span className=" text-gray-600 font-semibold text-sm">
-              {playerData.balance}
+              {playerData.balance}k
             </span>
           </div>
         </div>

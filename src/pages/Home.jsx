@@ -136,18 +136,18 @@ const Home = () => {
   return (
     <div className="p-6 max-w-3xl mx-auto">
       {userData && (
-        <div className="flex justify-center gap-3 mt-8 mb-12 relative">
+        <div className="flex justify-center gap-3 pt-8 mb-12 relative">
           <div onClick={() => navigate("/register")} className="flex items-center flex-col cursor-pointer">
             <img className="w-24" src={userData.avatar} alt="" />
 
-            <h1  className="text-2xl text-gray-600 font-semibold capitalize">
+            <h1  className="text-2xl text-gray-700 font-semibold uppercase">
               {userData.name}
              
             </h1>
           </div>
-          <span className="absolute right-0 text-gray-600 font-bold flex  gap-2">
-            <span className="material-symbols-outlined">poker_chip</span>
-            {userData.balance}
+          <span className="absolute right-0 top-0 text-gray-800 font-bold flex  gap-1">
+            <span className="material-symbols-outlined font-light">poker_chip</span>
+            {userData.balance}k
             
           </span>
         </div>
@@ -192,7 +192,8 @@ const Home = () => {
                   )}
                 </span>
               </div>
-              <span>{player.balance}</span>
+              <span>
+                {player.balance}k</span>
             </li>
           ))}
         </ul>
