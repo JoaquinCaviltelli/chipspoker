@@ -93,7 +93,7 @@ const TransferModal = ({
               setTransferAmount("");
               setStep(1); // Volver al paso 1
             }} // Cerrar el modal
-            className="bg-gray-800 text-white p-4 rounded-full flex items-center justify-center self-end fixed bottom-3 right-3"
+            className="bg-gray-800 text-white p-4 rounded-full flex items-center justify-center self-end fixed bottom-6 right-6"
           >
             <span className="material-symbols-outlined font-bold">chevron_backward</span>
           </button>

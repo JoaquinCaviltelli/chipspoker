@@ -99,7 +99,7 @@ const Register = () => {
   }, []);
 
   return (
-    <div className="flex justify-center inset-0 min-h-screen">
+    <div className="flex justify-center inset-0">
       <div className=" w-full ">
         <div className="flex justify-center h-80 max-w-lg mx-auto">
           {/* Swiper para los avatares con efecto cards */}
@@ -128,7 +128,7 @@ const Register = () => {
             </Swiper>
           )}
         </div>
-        <div className="p-6">
+        <div className="p-6 max-w-xl mx-auto">
 
 
         <div className="relative">

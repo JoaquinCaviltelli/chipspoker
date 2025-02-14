@@ -8,6 +8,7 @@
     font-family: montserrat;
     user-select: none;
     scrollbar-width: none;
+    text-transform: capitalize;
 }
 
 

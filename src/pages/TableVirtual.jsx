@@ -437,7 +437,7 @@ const TableVirtual = () => {
           })}
         </ul>
       </div>
-      <div className="w-full max-full mx-auto flex items-center justify-end fixed bottom-3 right-3 z-30">
+      <div className="w-full max-full mx-auto flex items-center justify-end fixed bottom-6 right-6 z-30">
         <button
           onClick={() => setIsAdminModalOpen(true)}
           className="bg-gray-800 text-white p-4  rounded-full flex items-center"

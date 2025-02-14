@@ -140,7 +140,7 @@ const Home = () => {
           <div onClick={() => navigate("/register")} className="flex items-center flex-col cursor-pointer">
             <img className="w-24" src={userData.avatar} alt="" />
 
-            <h1  className="text-2xl text-gray-700 font-semibold uppercase">
+            <h1  className="text-2xl text-gray-700 font-semibold capitalize">
               {userData.name}
              
             </h1>
@@ -155,15 +155,21 @@ const Home = () => {
       <div className="flex gap-4 flex-col-reverse sm:flex-row">
         <button
           onClick={handleMakeAdmin}
-          className="bg-gray-700 w-full text-white px-4 py-3 rounded-md font-medium"
+          className="bg-gray-700 w-full text-white px-4 py-3 rounded-md font-medium flex flex-col justify-center items-center text-xs"
         >
+          <span className="material-symbols-outlined text-4xl">
+dashboard
+</span>
           Crear mesa
         </button>
 
         <button
           onClick={joinRoom}
-          className="bg-[#7CA084] w-full text-white px-4 py-3 rounded-md font-medium"
+          className="bg-[#7CA084] w-full text-white px-4 py-3 rounded-md font-medium flex flex-col justify-center items-center text-xs"
         >
+          <span className="material-symbols-outlined text-4xl">
+sports_esports
+</span>
           Jugar
         </button>
 
